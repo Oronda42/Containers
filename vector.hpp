@@ -1,136 +1,224 @@
 
 #include <memory>
+#include <iostream>
+#include "iterator.hpp"
+
+namespace ft {
+
+template < class T, class Alloc = std::allocator<T> >
+struct vector
+{
+	typedef	T 														value_type;
+	typedef	Alloc 													allocator_type;
+	typedef	typename allocator_type::reference 						reference;
+	typedef	typename allocator_type::const_reference 				const_reference;
+	typedef typename allocator_type::pointer						pointer;
+	typedef typename allocator_type::const_pointer					const_pointer;
+	typedef	typename ft::random_iterator<T>							iterator;
+	typedef	typename ft::random_iterator<const T> 					const_iterator;
+	//typedef	typename ft::reverse_iterator<iterator>				reverse_iterator;
+	//typedef	typename ft::const_reverse_iterator<const iterator>	const_reverse_iterator;
+	//typedef	typename ft::iterator_traits::difference_type		difference_type;
+	typedef std::size_t						size_type;
 
 
-namespace ft{
+//----------MEMBER FUNCTIONS------------
 
-	// ---------------    ITERATORS    --------------- //
+	//----------CONSTRUCTORS------------
 
-
-
-	template< class Category, class T, class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T& > 
-	struct iterator
+	explicit vector (const allocator_type& alloc = allocator_type())
 	{
 
-		typedef Category	iterator_category;
-		typedef	T			value_type;
-		typedef	Distance	difference_type;
-		typedef	Pointer		pointer;
-		typedef	Reference	reference;
+	}
 
-		
-	};
+	explicit vector (size_type n, 
+	const value_type& val = value_type(),
+	const allocator_type& alloc = allocator_type())
+	{
+		std::cout << "coucou" << std::endl;
+	}
 
-	template< class Category, class T, class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T& > 
-	struct reverse_iterator
+	template <class InputIterator> 
+	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+	{
+		std::cout << "pouet" << std::endl;
+	}
+
+	vector (const vector& x)
 	{
 
-		typedef Category	iterator_category;
-		typedef	T			value_type;
-		typedef	Distance	difference_type;
-		typedef	Pointer		pointer;
-		typedef	Reference	reference;
+	}
 
-	};
 
-	template <class T> 
-	class vector_iterator : ft::iterator< std::random_access_iterator_tag, T>
+	//-----------DESTRUCTOR-------------
+
+	~vector()
 	{
-		vector_iterator(int* T) : p(x) 
-		{
 
-		}
-		vector_iterator(const vector_iterator& rhs) : p(rhs.p) 
-		{
-		}
-		vector_iterator& operator++()
-		{
-			++p;return *this;
-		}
-		vector_iterator operator++(int) 
-		{
-			vector_iterator tmp(*this);
-			operator++(); 
-		 	return tmp;
-		}
-		bool operator==(const vector_iterator& rhs) const 
-		{
-			return p == rhs.p;
-		}
-		bool operator!=(const vector_iterator& rhs) const 
-		{
-			return p!=rhs.p;
-		}
-		vector_iterator& operator*() 
-		{
-			return *p;
-		}
+	}
 
-		vector_iterator& begin()
-		{
-			
-		}
+vector& operator= (const vector& rhs)
+{
+
+}
 
 
-	};
+//-----------ELEMENT ACCESS------------
 
 
 
-	// ---------------    ITERATOR TRAITS    --------------- //
+reference operator[] (size_type n)
+{
 
-	template <class Iterator> class iterator_traits
-	{
-		typedef Iterator::difference_type difference_type;
-		typedef Iterator::value_type value_type;
-		typedef Iterator::pointer pointer;
-		typedef Iterator::reference reference;
-		typedef Iterator::iterator_category iterator_category;
-	};
-	template <class T> class iterator_traits<T*>
-	{
-		typedef T::difference_type ptrdiff_t;
-		typedef T::value_type T;
-		typedef T::pointer T*;
-		typedef T::reference T&;
-		typedef T::iterator_category std::random_access_iterator_tag;
-	};
-	template <class T> class iterator_traits<const T*>
-	{
-		typedef T::difference_type ptrdiff_t;
-		typedef T::value_type T;
-		typedef T::pointer const T*;
-		typedef T::reference const T&;
-		typedef T::iterator_category std::random_access_iterator_tag;
-	};
+}
+
+const_reference operator[] (size_type n) const
+{
+
+}
+
+reference at (size_type n)
+{
+
+}
+const_reference at (size_type n) const
+{
+
+}
+
+reference front()
+{
+
+}
+const_reference front() const
+{
+
+}
+
+reference back()
+{
+
+}
+const_reference back() const
+{
+
+}
 
 
-	// ---------------    VECTOR    --------------- //
+//----------MODIFIERS-----------
+template <class InputIterator>
+void assign (InputIterator first, InputIterator last)
+{
+	
+}
 
-	template < class T, class Alloc = std::allocator<T> >
-	class vector
-	{
-		typedef	T 											value_type;
-		typedef	Alloc 										allocator_type;
-		typedef	allocator_type::reference 					reference;
-		typedef	allocator_type::const_reference 			const_reference;
-		typedef allocator_type::pointer						pointer;
-		typedef allocator_type::const_pointer				const_pointer;
-		typedef	ft::vector_iterator<T>						iterator;
-		typedef	ft::vector_iterator<const T> 				const_iterator;
-		typedef	ft::reverse_iterator<iterator>				reverse_iterator;
-		typedef	ft::const_reverse_iterator<const iterator>	const_reverse_iterator;
-		typedef	ft::iterator_traits::difference_type		difference_type;
-		typedef difference_type								size_type;
+void assign (size_type n, const value_type& val)
+{
 
-		vector(){}
-		~vector(){}
-		vector& operator=(vector& rhs){}
+}
 
-		//ITERATORS
-		iterator& begin(){return iterator.begin()}
-		iterator& end(){return iterator.end()}
-		iterator& rbegin(){return iterator.rbegin()}
-		iterator& rend(){return iterator.rend()}
-		
-	};
+void push_back (const value_type& val)
+{
+
+}
+
+void pop_back()
+{
+
+}
+
+iterator insert (iterator position, const value_type& val)
+{
+
+}
+
+void insert (iterator position, size_type n, const value_type& val)
+{
+
+}
+
+template <class InputIterator>
+void insert (iterator position, InputIterator first, InputIterator last)
+{
+	
+}
+
+iterator erase (iterator position)
+{
+
+}
+
+iterator erase (iterator first, iterator last)
+{
+
+}
+
+void swap (vector& x)
+{
+
+}
+
+void clear()
+{
+
+}
+
+
+//----------AllOCATOR-----------
+
+allocator_type get_allocator() const
+{
+
+}
+
+//----------ITERATORS-----------
+
+iterator& begin(){return iterator(_ptr);}
+
+//  iterator& end(){return iterator.end();}
+//  iterator& rbegin(){return iterator.rbegin();}
+//  iterator& rend(){return iterator.rend();}
+
+//----------CAPACITY-----------
+
+size_type size() const
+{
+
+}
+
+size_type max_size() const
+{
+
+}
+
+void resize (size_type n, value_type val = value_type())
+{
+
+}
+
+size_type capacity() const
+{
+
+}
+
+bool empty() const
+{
+
+}
+
+void reserve (size_type n)
+{
+
+}
+
+
+
+
+//----------MEMBER VARIABLES-----------
+private :
+	size_t size;
+	T* _ptr;
+	size_t capacity;
+	
+};
 }
