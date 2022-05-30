@@ -19,58 +19,73 @@
 
 int main(int argc, char const *argv[])
 {
-	 
-	// {
-	// 	std::vector<int> vec;
-	// 	vec.push_back(10);
-	// 	vec.push_back(11);
-	// 	vec.push_back(12);
-	// 	vec.push_back(13);
-	// 	std::cout <<  "capacity = " << vec.capacity() << std::endl;
-	// 	std::cout <<  "size = " << vec.size() << std::endl;
-
-	// 	for (size_t i = 0; i < vec.size(); i++)
-	// 		std::cout << vec[i] << std::endl;
-	// }
-
-	// {
-	// 	ft::vector<int> vec;
-	// 	vec.push_back(10);
-	// 	vec.push_back(11);
-	// 	vec.push_back(12);
-	// 	vec.push_back(13);
-	// 	std::cout <<  "capacity = " << vec.capacity() << std::endl;
-	// 	std::cout <<  "size = " << vec.size() << std::endl;
-
-	// 	for (size_t i = 0; i < vec.size(); i++)
-	// 		std::cout << vec[i] << std::endl;
-	// }
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	 	std::cout <<  "/////////// INT //////////// " << std::endl;
 	{
-		std::vector<std::string> vec;
-		std::vector<int>::iterator
-		vec.push_back("10");
-		vec.push_back("11");
-		vec.push_back("12");
-		vec.push_back("13");
+		std::cout <<  "** ORIGINAL **" << std::endl;
+		std::vector<int> vec;
+		vec.push_back(10);
+		vec.push_back(11);
+		vec.push_back(12);
+		vec.push_back(13);
+		std::cout <<  "capacity = " << vec.capacity() << std::endl;
+		std::cout <<  "size = " << vec.size() << std::endl;
+		for (size_t i = 0; i < vec.size(); i++)
+			std::cout << vec[i] << std::endl;
+		std::cout << "begin = "<< *(vec.begin()) << std::endl;
+		std::cout << "end -1  = "<< *(vec.end() -1) << std::endl;
+	}
+	{
+		std::cout <<  "** FT **" << std::endl;
+		ft::vector<int> vec;
+		vec.push_back(10);
+		vec.push_back(11);
+		vec.push_back(12);
+		vec.push_back(13);
 		std::cout <<  "capacity = " << vec.capacity() << std::endl;
 		std::cout <<  "size = " << vec.size() << std::endl;
 
 		for (size_t i = 0; i < vec.size(); i++)
 			std::cout << vec[i] << std::endl;
+		std::cout << "begin = "<< *(vec.begin()) << std::endl;
+		std::cout << "end -1  = "<< *(vec.end() -1) << std::endl;
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		std::cout <<  "///////////// STRING /////////// " << std::endl;
+	{
+		std::cout <<  "** ORIGINAL **" << std::endl;
+		std::vector<std::string> vec;
+		vec.push_back("coucou");
+		vec.push_back(" c'est");
+		vec.push_back(" moi");
+		vec.push_back(" toto");
+		std::cout <<  "capacity = " << vec.capacity() << std::endl;
+		std::cout <<  "size = " << vec.size() << std::endl;
+
+		std::string str;
+		for (size_t i = 0; i < vec.size(); i++)
+			str.append(vec[i]) ;
+		std::cout << str << std::endl;
+		std::cout << "begin = "<< *(vec.begin()) << std::endl;
+		std::cout << "end -1  = "<< *(vec.end() -1) << std::endl;
 	}
 
 	{
+		std::cout <<  "** FT **" << std::endl;
 		ft::vector<std::string> vec;
-		vec.push_back("10");
-		vec.push_back("11");
-		vec.push_back("12");
-		vec.push_back("13");
+		vec.push_back("coucou");
+		vec.push_back(" c'est");
+		vec.push_back(" moi");
+		vec.push_back(" toto");
 		std::cout <<  "capacity = " << vec.capacity() << std::endl;
 		std::cout <<  "size = " << vec.size() << std::endl;
 
+		std::string str;
 		for (size_t i = 0; i < vec.size(); i++)
-			std::cout << vec[i] << std::endl;
+			str.append(vec[i]) ;
+		std::cout << str << std::endl;
+		std::cout << "begin = "<< *(vec.begin()) << std::endl;
+		std::cout << "end -1  = "<< *(vec.end() - 1) << std::endl;
 	}
 
 	return 0;
