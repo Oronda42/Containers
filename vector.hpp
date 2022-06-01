@@ -26,16 +26,16 @@ namespace ft {
 template < class T, class Alloc = std::allocator<T> >
 struct vector
 {
-	typedef	T 														value_type;
-	typedef	 Alloc 													allocator_type;
-	typedef	typename allocator_type::reference						reference;
-	typedef	typename allocator_type::const_reference 				const_reference;
-	typedef typename Alloc::pointer									pointer;
-	typedef typename Alloc::const_pointer							const_pointer;
-	typedef	typename ft::random_access_iterator<T>					iterator;
-	//typedef	typename ft::random_access_iterator<const T> 			const_iterator;
-	//typedef	typename ft::reverse_iterator<iterator>				reverse_iterator;
-	//typedef	typename ft::const_reverse_iterator<const iterator>	const_reverse_iterator;
+	typedef	T 															value_type;
+	typedef	 Alloc 														allocator_type;
+	typedef	typename allocator_type::reference							reference;
+	typedef	typename allocator_type::const_reference 					const_reference;
+	typedef typename Alloc::pointer										pointer;
+	typedef typename Alloc::const_pointer								const_pointer;
+	typedef	typename ft::random_access_iterator<T>						iterator;
+	typedef	typename ft::random_access_iterator<const T> 				const_iterator;
+	typedef	typename std::reverse_iterator<iterator>					reverse_iterator;
+	typedef	typename std::reverse_iterator<const iterator>				const_reverse_iterator;
 	typedef	typename ft::iterator_traits<iterator>::difference_type		difference_type;
 	typedef std::size_t						size_type;
 
@@ -44,14 +44,14 @@ struct vector
 
 		//----------CONSTRUCTORS------------
 
-	explicit vector (const allocator_type& alloc = allocator_type()) :  _alloc(alloc), _size(0), _capacity(0), _ptr(0)
+	explicit vector (const allocator_type& alloc = allocator_type()) : _ptr(0), _size(0), _capacity(0),  _alloc(alloc)
 	{
 		std::cout << "ft vector default constructor" << std::endl;
 	}
 
 	explicit vector (size_type n, 
 	const value_type& val = value_type(),
-	const allocator_type& alloc = allocator_type()) : _size(n), _capacity(n), _ptr(0)
+	const allocator_type& alloc = allocator_type()) :_ptr(0),  _size(n), _capacity(n), _alloc(alloc)
 	{
 		std::cout << "ft vector fill constructor" << std::endl;
 		_ptr = _alloc.allocate(n);
@@ -97,11 +97,11 @@ struct vector
 
 	vector& operator=(const vector& src)
 	{
-		std::cout << "ft vector = operator" << std::endl;
+		std::cout << "ft vector operator=" << std::endl;
 		_ptr =  this->_alloc.allocate(src._capacity);
 		_capacity = src._capacity;
 		_size = src._size;
-		for (size_t i = 0; i < this._size - 1; i++)
+		for (size_t i = 0; i < this->_size - 1; i++)
 			_ptr[i] = src[i];
 		return *this;
 
@@ -151,11 +151,16 @@ struct vector
 	
 	void assign (iterator first, iterator last)
 	{
+		(void)first;
+		(void)last;
 		return;
 	}
 
 	void assign (size_type n, const value_type& val)
 	{
+		(void)n;
+		(void)val;
+
 		return;
 	}
 
@@ -180,23 +185,31 @@ struct vector
 
 	iterator insert (iterator position, const value_type& val)
 	{
+		(void)position;
+		(void)val;
 		return begin();
 	}
 
 	void insert (iterator position, size_type n, const value_type& val)
 	{
+		(void)position;
+		(void)n;
+		(void)val;
 		return;
 	}
 
 	template <class InputIterator>
 	void insert (iterator position, InputIterator first, InputIterator last)
 	{
+		(void)position;
+		(void)first;
+		(void)last;
 		return;
 	}
 
 	iterator erase (iterator position)
 	{
-		if(position = end() - 1)
+		if(position == (end() - 1))
 		{
 			_alloc.destroy(position.base());
 			_alloc.deallocate(position.base());
@@ -207,7 +220,7 @@ struct vector
 		_alloc.destroy(position.base());
 		_alloc.deallocate(position.base());
 		_size--;
-		int nbOfelementsFromPositionToEnd = 0;
+		size_t nbOfelementsFromPositionToEnd = 0;
 		for (position; position != end(); position++)
 		{
 			nbOfelementsFromPositionToEnd++;
@@ -231,12 +244,13 @@ struct vector
 
 	void swap (vector& x)
 	{
-
+		(void)x;
+		return;
 	}
 
 	void clear()
 	{
-
+		return;
 	}
 
 
@@ -275,7 +289,9 @@ struct vector
 
 	void resize(size_type n, value_type val = value_type())
 	{
-
+		(void)n;
+		(void)val;
+		return;
 	}
 
 	size_type capacity() const
