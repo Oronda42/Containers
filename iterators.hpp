@@ -62,7 +62,7 @@ class random_access_iterator :  public ft::iterator<ft::random_access_iterator_t
 
 		random_access_iterator() : _ptr(NULL) {}
 		random_access_iterator(pointer ptr) : _ptr(ptr) {}
-		random_access_iterator(const random_access_iterator& src) : _ptr(src._ptr) {}\
+		random_access_iterator(const random_access_iterator& src) : _ptr(src._ptr) {}
 		virtual ~random_access_iterator() {}
 
 		pointer base() const

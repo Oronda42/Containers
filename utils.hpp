@@ -15,9 +15,6 @@
 
 namespace ft{
 
-
-
-
 	template<bool, typename>
 	struct enable_if 
 	{ };
@@ -35,36 +32,35 @@ namespace ft{
 	template<typename T>
 	struct is_integral
 	{
-		enum { __value = 0 };
+		enum { value = 0 };
 		typedef false_type type;
 	};
 
-  
   template<>
     struct is_integral<bool>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<char>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<signed char>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<unsigned char>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
@@ -72,7 +68,7 @@ namespace ft{
   template<>
     struct is_integral<wchar_t>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 # endif
@@ -81,7 +77,7 @@ namespace ft{
   template<>
     struct is_integral<char8_t>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 #endif
@@ -90,14 +86,14 @@ namespace ft{
 //   template<>
 //     struct is_integral<char16_t>
 //     {
-//       enum { __value = 1 };
+//       enum { value = 1 };
 //       typedef true_type type;
 //     };
 
 //   template<>
 //     struct is_integral<char32_t>
 //     {
-//       enum { __value = 1 };
+//       enum { value = 1 };
 //       typedef true_type type;
 //     };
 // #endif
@@ -105,58 +101,70 @@ namespace ft{
   template<>
     struct is_integral<short>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<unsigned short>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<int>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<unsigned int>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<long>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<unsigned long>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<long long>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
 
   template<>
     struct is_integral<unsigned long long>
     {
-      enum { __value = 1 };
+      enum { value = 1 };
       typedef true_type type;
     };
+
+    template<class iterator> 
+    typename ft::iterator_traits<iterator>::difference_type  distance (iterator first, iterator last)
+    {
+      typename ft::iterator_traits<iterator>::difference_type result = 0;
+      while (first != last)
+      {
+        first++;
+        result++;
+      }
+      return (result);
+    }
 
 
 

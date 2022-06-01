@@ -36,7 +36,7 @@ struct vector
 	//typedef	typename ft::random_access_iterator<const T> 			const_iterator;
 	//typedef	typename ft::reverse_iterator<iterator>				reverse_iterator;
 	//typedef	typename ft::const_reverse_iterator<const iterator>	const_reverse_iterator;
-	//typedef	typename ft::iterator_traits::difference_type		difference_type;
+	typedef	typename ft::iterator_traits<iterator>::difference_type		difference_type;
 	typedef std::size_t						size_type;
 
 
@@ -58,26 +58,34 @@ struct vector
 		for (size_type i = 0; i < n; i++)
 		{
 			_alloc.construct(_ptr + i, val);
-			//*(_ptr + i) = val;
 		}
 	}
 	
-	template <class iterator> 
-	vector (iterator first, iterator last,const allocator_type& alloc = allocator_type()) :  _alloc(alloc), _size(0), _capacity(0), _ptr(0)
+	template <class iterator>
+	vector (iterator first, iterator last,const allocator_type& alloc = allocator_type(),
+	typename ft::enable_if<!ft::is_integral<iterator>::value,iterator >::type* = NULL):  _alloc(alloc), _size(0), _capacity(0), _ptr(0)
 	{
-		// for (iterator it; it != last; it++ )
-		// {
-			
-		// }
 		std::cout << "ft vector range constructor" << std::endl;
+		difference_type n = ft::distance(first, last);
+		_ptr = _alloc.allocate(n);
+		_size = n;
+		_capacity = n;
+		for (int i = 0; i < n; i++)
+		{
+			_alloc.construct(_ptr + i, *first);
+			first++;
+		}
 	}
 
 	vector (const vector& src) : _alloc(src._alloc)
 	{
 		std::cout << "ft vector copy constructor" << std::endl;
-		*this = src;
+		_ptr =  this->_alloc.allocate(src._capacity);
+		_capacity = src._capacity;
+		_size = src._size;
+		for (size_t i = 0; i < this->_size - 1; i++)
+			_ptr[i] = src[i];
 	}
-
 
 	//-----------DESTRUCTOR-------------
 
@@ -87,15 +95,20 @@ struct vector
 		_alloc.deallocate(_ptr,_size);
 	}
 
-	vector& operator= (const vector& rhs)
+	vector& operator=(const vector& src)
 	{
+		std::cout << "ft vector = operator" << std::endl;
+		_ptr =  this->_alloc.allocate(src._capacity);
+		_capacity = src._capacity;
+		_size = src._size;
+		for (size_t i = 0; i < this._size - 1; i++)
+			_ptr[i] = src[i];
+		return *this;
 
 	}
 
 
 	//-----------ELEMENT ACCESS------------
-
-
 
 	reference operator[] (size_type n)
 	{
@@ -109,42 +122,41 @@ struct vector
 
 	reference at (size_type n)
 	{
-
+		return operator[](n);
 	}
 	const_reference at (size_type n) const
 	{
-
+		return operator[](n);
 	}
 
 	reference front()
 	{
-
+		return *(begin());
 	}
 	const_reference front() const
 	{
-
+		return *(begin());
 	}
 
 	reference back()
 	{
-
+		return *(end() - 1);
 	}
 	const_reference back() const
 	{
-
+		*(end() - 1);
 	}
-
 
 	//----------MODIFIERS-----------
 	
 	void assign (iterator first, iterator last)
 	{
-		
+		return;
 	}
 
 	void assign (size_type n, const value_type& val)
 	{
-
+		return;
 	}
 
 	void push_back (const value_type& val)
@@ -162,33 +174,59 @@ struct vector
 	
 	void pop_back()
 	{
-
+		_alloc.destroy(_ptr[_size - 1]);
+		_alloc.deallocate(_ptr[_size - 1], 1);
 	}
 
 	iterator insert (iterator position, const value_type& val)
 	{
-
+		return begin();
 	}
 
 	void insert (iterator position, size_type n, const value_type& val)
 	{
-
+		return;
 	}
 
 	template <class InputIterator>
 	void insert (iterator position, InputIterator first, InputIterator last)
 	{
-		
+		return;
 	}
 
 	iterator erase (iterator position)
 	{
-
+		if(position = end() - 1)
+		{
+			_alloc.destroy(position.base());
+			_alloc.deallocate(position.base());
+			_size--;
+			return end();
+		}
+		
+		_alloc.destroy(position.base());
+		_alloc.deallocate(position.base());
+		_size--;
+		int nbOfelementsFromPositionToEnd = 0;
+		for (position; position != end(); position++)
+		{
+			nbOfelementsFromPositionToEnd++;
+		}
+		for (size_t i = 0; i < nbOfelementsFromPositionToEnd; i++)
+		{
+			*position = *(position + 1);
+		}
+		
+		return position;
 	}
 
 	iterator erase (iterator first, iterator last)
 	{
-
+		for (first; first != last ; first++)
+		{
+			erase(first);
+			_size--;
+		}
 	}
 
 	void swap (vector& x)
