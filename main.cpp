@@ -30,7 +30,9 @@ void print(T& x, std::string name = "")
 
 int main(int argc, char const *argv[])
 {
-	//std::cout <<  "/////////// INT PUSH //////////// " << std::endl;
+	(void)argc;
+	(void)argv;
+	// std::cout <<  "/////////// INT PUSH POP //////////// " << std::endl;
 	// {
 	// 	std::cout <<  "** ORIGINAL **" << std::endl;
 	// 	std::vector<int> vec;
@@ -38,12 +40,9 @@ int main(int argc, char const *argv[])
 	// 	vec.push_back(11);
 	// 	vec.push_back(12);
 	// 	vec.push_back(13);
-	// 	std::cout <<  "capacity = " << vec.capacity() << std::endl;
-	// 	std::cout <<  "size = " << vec.size() << std::endl;
-	// 	for (size_t i = 0; i < vec.size(); i++)
-	// 		std::cout << vec[i] << std::endl;
-	// 	std::cout << "begin = "<< *(vec.begin()) << std::endl;
-	// 	std::cout << "end -1  = "<< *(vec.end() -1) << std::endl;
+	// 	vec.pop_back();
+	// 	print(vec, "vec");
+		
 	// }
 	// {
 	// 	std::cout <<  "** FT **" << std::endl;
@@ -52,52 +51,33 @@ int main(int argc, char const *argv[])
 	// 	vec.push_back(11);
 	// 	vec.push_back(12);
 	// 	vec.push_back(13);
-	// 	std::cout <<  "capacity = " << vec.capacity() << std::endl;
-	// 	std::cout <<  "size = " << vec.size() << std::endl;
-
-	// 	for (size_t i = 0; i < vec.size(); i++)
-	// 		std::cout << vec[i] << std::endl;
-	// 	std::cout << "begin = "<< *(vec.begin()) << std::endl;
-	// 	std::cout << "end -1  = "<< *(vec.end() -1) << std::endl;
-		
+	// 	vec.pop_back();
+	// 	print(vec, "vec");
 	// }
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// std::cout <<  "///////////// STRING PUSH /////////// " << std::endl;
+	// std::cout <<  "///////////// STRING PUSH POP/////////// " << std::endl;
 	// {
 	// 	std::cout <<  "** ORIGINAL **" << std::endl;
 	// 	std::vector<std::string> vec;
 	// 	vec.push_back("coucou");
-	// 	vec.push_back(" c'est");
-	// 	vec.push_back(" moi");
-	// 	vec.push_back(" toto");
-	// 	std::cout <<  "capacity = " << vec.capacity() << std::endl;
-	// 	std::cout <<  "size = " << vec.size() << std::endl;
-
-	// 	std::string str;
-	// 	for (size_t i = 0; i < vec.size(); i++)
-	// 		str.append(vec[i]) ;
-	// 	std::cout << str << std::endl;
-	// 	std::cout << "begin = "<< *(vec.begin()) << std::endl;
-	// 	std::cout << "end -1  = "<< *(vec.end() -1) << std::endl;
+	// 	vec.push_back("c'est");
+	// 	vec.push_back("moi");
+	// 	vec.push_back("toto");
+	// 	vec.pop_back();
+	// 	print(vec);
 	// }
 
 	// {
 	// 	std::cout <<  "** FT **" << std::endl;
 	// 	ft::vector<std::string> vec;
-	// 	vec.push_back("coucou");
-	// 	vec.push_back(" c'est");
-	// 	vec.push_back(" moi");
-	// 	vec.push_back(" toto");
-	// 	std::cout <<  "capacity = " << vec.capacity() << std::endl;
-	// 	std::cout <<  "size = " << vec.size() << std::endl;
-
-	// 	std::string str;
-	// 	for (size_t i = 0; i < vec.size(); i++)
-	// 		str.append(vec[i]) ;
-	// 	std::cout << str << std::endl;
-	// 	std::cout << "begin = "<< *(vec.begin()) << std::endl;
-	// 	std::cout << "end -1  = "<< *(vec.end() - 1) << std::endl;
+	// 	vec.push_back("coucou pouet pouet");
+	// 	vec.push_back("c'est");
+	// 	vec.push_back("moi");
+	// 	vec.push_back("toto");
+	// 	vec.pop_back();
+	// 	print(vec);
+		
 	// }
 
 	// std::cout <<  "/////////// FILL CONSTRUCTOR //////////// " << std::endl;
@@ -194,34 +174,34 @@ int main(int argc, char const *argv[])
 	// 	print(vec2,"vec2");
 	// }
 
-	std::cout <<  "///////////// STRING RANGE CONSTRUCTOR /////////// " << std::endl;
-	{
-		std::cout <<  "** ORIGINAL **" << std::endl;
-		std::vector<std::string> vec;
-		vec.push_back("coucou");
-		vec.push_back("c'est");
-		vec.push_back("moi");
-		vec.push_back("toto");
-		std::vector<std::string>::iterator iteratorBegin = vec.begin();
-	 	std::vector<std::string>::iterator iteratorEnd = vec.end();
-		std::vector<std::string> vec2(iteratorBegin,iteratorEnd);
-		print(vec, "vec");
-		print(vec2, "vec2");
-	}
+	// std::cout <<  "///////////// STRING RANGE CONSTRUCTOR /////////// " << std::endl;
+	// {
+	// 	std::cout <<  "** ORIGINAL **" << std::endl;
+	// 	std::vector<std::string> vec;
+	// 	vec.push_back("coucou");
+	// 	vec.push_back("c'est");
+	// 	vec.push_back("moi");
+	// 	vec.push_back("toto");
+	// 	std::vector<std::string>::iterator iteratorBegin = vec.begin();
+	//  	std::vector<std::string>::iterator iteratorEnd = vec.end();
+	// 	std::vector<std::string> vec2(iteratorBegin,iteratorEnd);
+	// 	print(vec, "vec");
+	// 	print(vec2, "vec2");
+	// }
 
-	{
-		std::cout <<  "** FT **" << std::endl;
-		ft::vector<std::string> vec;
-		vec.push_back("coucou");
-		vec.push_back("c'est");
-		vec.push_back("moi");
-		vec.push_back("toto");
-		ft::vector<std::string>::iterator iteratorBegin = vec.begin();
-	 	ft::vector<std::string>::iterator iteratorEnd = vec.end();
-		ft::vector<std::string> vec2(iteratorBegin,iteratorEnd);
-		print(vec, "vec");
-		print(vec2, "vec2");
-	}
+	// {
+	// 	std::cout <<  "** FT **" << std::endl;
+	// 	ft::vector<std::string> vec;
+	// 	vec.push_back("coucou");
+	// 	vec.push_back("c'est");
+	// 	vec.push_back("moi");
+	// 	vec.push_back("toto");
+	// 	ft::vector<std::string>::iterator iteratorBegin = vec.begin();
+	//  	ft::vector<std::string>::iterator iteratorEnd = vec.end();
+	// 	ft::vector<std::string> vec2(iteratorBegin,iteratorEnd);
+	// 	print(vec, "vec");
+	// 	print(vec2, "vec2");
+	// }
 
 	return 0;
 }

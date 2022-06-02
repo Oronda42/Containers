@@ -20,6 +20,7 @@
 #include "iterators.hpp"
 #include "utils.hpp"
 #include <cstring>
+#include <exception>
 
 namespace ft {
 
@@ -46,14 +47,14 @@ struct vector
 
 	explicit vector (const allocator_type& alloc = allocator_type()) : _ptr(0), _size(0), _capacity(0),  _alloc(alloc)
 	{
-		std::cout << "ft vector default constructor" << std::endl;
+		
 	}
 
 	explicit vector (size_type n, 
 	const value_type& val = value_type(),
 	const allocator_type& alloc = allocator_type()) :_ptr(0),  _size(n), _capacity(n), _alloc(alloc)
 	{
-		std::cout << "ft vector fill constructor" << std::endl;
+		
 		_ptr = _alloc.allocate(n);
 		for (size_type i = 0; i < n; i++)
 		{
@@ -65,7 +66,7 @@ struct vector
 	vector (iterator first, iterator last,const allocator_type& alloc = allocator_type(),
 	typename ft::enable_if<!ft::is_integral<iterator>::value,iterator >::type* = NULL):  _alloc(alloc), _size(0), _capacity(0), _ptr(0)
 	{
-		std::cout << "ft vector range constructor" << std::endl;
+		
 		difference_type n = ft::distance(first, last);
 		_ptr = _alloc.allocate(n);
 		_size = n;
@@ -79,7 +80,7 @@ struct vector
 
 	vector (const vector& src) : _alloc(src._alloc)
 	{
-		std::cout << "ft vector copy constructor" << std::endl;
+		
 		_ptr =  this->_alloc.allocate(src._capacity);
 		_capacity = src._capacity;
 		_size = src._size;
@@ -91,13 +92,12 @@ struct vector
 
 	~vector()
 	{
-		_alloc.destroy(_ptr);
-		_alloc.deallocate(_ptr,_size);
+		clear();
 	}
 
 	vector& operator=(const vector& src)
 	{
-		std::cout << "ft vector operator=" << std::endl;
+
 		_ptr =  this->_alloc.allocate(src._capacity);
 		_capacity = src._capacity;
 		_size = src._size;
@@ -120,12 +120,17 @@ struct vector
 		return _ptr[n];
 	}
 
+	
 	reference at (size_type n)
 	{
+		if(n < 0 || n >= _size)
+			throw (std::out_of_range("pouet"));
 		return operator[](n);
 	}
 	const_reference at (size_type n) const
 	{
+		if(n < 0 || n >= _size)
+			throw (std::out_of_range("pouet"));
 		return operator[](n);
 	}
 
@@ -144,7 +149,7 @@ struct vector
 	}
 	const_reference back() const
 	{
-		*(end() - 1);
+		return *(end() - 1);
 	}
 
 	//----------MODIFIERS-----------
@@ -179,8 +184,10 @@ struct vector
 	
 	void pop_back()
 	{
-		_alloc.destroy(_ptr[_size - 1]);
-		_alloc.deallocate(_ptr[_size - 1], 1);
+		
+		_alloc.destroy(_ptr + _size - 1);
+		_size--;
+		
 	}
 
 	iterator insert (iterator position, const value_type& val)
@@ -250,6 +257,16 @@ struct vector
 
 	void clear()
 	{
+		size_t previousSize = _size;
+		for (size_t i = 0; i < previousSize; i++)
+		{
+			_alloc.destroy(_ptr + i);
+			
+			_size--;
+		}
+		_alloc.deallocate(_ptr,previousSize);
+		
+		
 		return;
 	}
 
@@ -263,17 +280,42 @@ struct vector
 
 	//----------ITERATORS-----------
 
-	iterator begin()
+	iterator begin() 
 	{
 		return iterator(_ptr);
 	}
+	const_iterator begin() const
+	{
+		return const_iterator(_ptr);
+	}
 
-	iterator end()
+	iterator end() 
 	{
 		return iterator(_ptr + _size);
 	}
-	//  iterator& rbegin(){return iterator.rbegin();}
-	//  iterator& rend(){return iterator.rend();}
+
+	const_iterator end() const
+	{
+		return const_iterator(_ptr + _size);
+	}
+
+	reverse_iterator rbegin()
+	{
+		return reverse_iterator(end());
+	}
+	const_reverse_iterator rbegin() const
+	{
+		return const_reverse_iterator(end());
+	}
+
+	reverse_iterator rend()
+	{
+		return reverse_iterator(begin());
+	}
+	const_reverse_iterator rend() const
+	{
+		return const_reverse_iterator(begin());
+	}
 
 	//----------CAPACITY-----------
 
@@ -284,7 +326,8 @@ struct vector
 
 	size_type max_size() const
 	{
-		return std::numeric_limits<size_type>::max();
+		
+		return _alloc.max_size();
 	}
 
 	void resize(size_type n, value_type val = value_type())
@@ -315,7 +358,11 @@ struct vector
 		pointer temp = _alloc.allocate(n);
 		for (size_type i = 0; i < _size; i++)
 			_alloc.construct(temp + i, _ptr[i]);
-		_alloc.deallocate(_ptr,_size);
+		if (_size !=0)
+		{
+			_alloc.deallocate(_ptr,_size);
+		}
+		
 		_ptr = temp;
 		_capacity = n;
 	}
