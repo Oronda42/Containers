@@ -203,6 +203,57 @@ int main(int argc, char const *argv[])
 	// 	print(vec2, "vec2");
 	// }
 
+	//INSERT single element 
+
+	// ft::vector<int> vec(6);
+
+	// for (unsigned long int i = 1; i < vec.size(); ++i)
+	// 	vec[i] = i ;
+	// print(vec);
+	// vec.insert(vec.end() - 3 , 0);
+	// print(vec);
+
+	//INSERT fill 
+	// ft::vector<int> vec(5);
+
+	// for (unsigned long int i = 1; i < vec.size(); ++i)
+	// 	vec[i] = i ;
+	// print(vec);
+	// vec.insert(vec.end() - 2,  3, -1);
+	// print(vec);
+
+	//range  
+	// ft::vector<int> vec(5);
+
+	// for (unsigned long int i = 1; i < vec.size(); ++i)
+	// 	vec[i] = i ;
+	
+	// vec.insert(vec.end() -1 , -1);
+	// print(vec);
+	// std::vector<int> anothervector (2,400);
+	// vec.insert(vec.begin() +  2, anothervector.begin(),anothervector.end());
+	// print(vec);
+
+	ft::vector<int> vec(10);
+	ft::vector<int> vec2;
+
+	for (unsigned long int i = 0; i < vec.size(); ++i)
+		vec[i] = (vec.size() - i) * 3;
+	print(vec);
+
+	vec.push_back(21);
+	vec.push_back(42);
+	vec.push_back(21);
+	vec.push_back(42);
+
+
+	vec2.insert(vec2.begin() + 2, vec.begin(), vec.end());
+	vec.clear();
+	print(vec2);
+
+	print(vec);
+	
+
 	return 0;
 }
 

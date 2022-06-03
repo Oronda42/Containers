@@ -64,7 +64,7 @@ struct vector
 	
 	template <class iterator>
 	vector (iterator first, iterator last,const allocator_type& alloc = allocator_type(),
-	typename ft::enable_if<!ft::is_integral<iterator>::value,iterator >::type* = NULL):  _alloc(alloc), _size(0), _capacity(0), _ptr(0)
+	typename ft::enable_if<!ft::is_integral<iterator>::value,iterator >::type* = NULL):  _ptr(0), _size(0),  _capacity(0) ,_alloc(alloc)
 	{
 		
 		difference_type n = ft::distance(first, last);
@@ -84,7 +84,7 @@ struct vector
 		_ptr =  this->_alloc.allocate(src._capacity);
 		_capacity = src._capacity;
 		_size = src._size;
-		for (size_t i = 0; i < this->_size - 1; i++)
+		for (size_t i = 0; i < _size; i++)
 			_ptr[i] = src[i];
 	}
 
@@ -93,6 +93,7 @@ struct vector
 	~vector()
 	{
 		clear();
+		_alloc.deallocate(_ptr, _capacity);
 	}
 
 	vector& operator=(const vector& src)
@@ -101,7 +102,7 @@ struct vector
 		_ptr =  this->_alloc.allocate(src._capacity);
 		_capacity = src._capacity;
 		_size = src._size;
-		for (size_t i = 0; i < this->_size - 1; i++)
+		for (size_t i = 0; i < this->_size; i++)
 			_ptr[i] = src[i];
 		return *this;
 
@@ -153,19 +154,29 @@ struct vector
 	}
 
 	//----------MODIFIERS-----------
-	
-	void assign (iterator first, iterator last)
+	template <class iterator>
+	void assign(iterator first,  iterator last, typename ft::enable_if<!ft::is_integral<iterator>::value,iterator >::type* = NULL)
 	{
-		(void)first;
-		(void)last;
+		size_type n =  ft::distance(first,last);
+		reserve(n);
+		
+		for (size_type i = 0; i < _size; i++)
+			_alloc.destroy(_ptr + i);
+		_size = n;
+		for (size_type i = 0; first != last;  i++,first++)
+			_alloc.construct(_ptr + i, *first);
+		
 		return;
 	}
 
 	void assign (size_type n, const value_type& val)
 	{
-		(void)n;
-		(void)val;
-
+		reserve(n);
+		for (size_t i = 0; i < _size; i++)
+			_alloc.destroy(_ptr + i);
+		_size = n;
+		for (size_type i = 0; i < n; i++)
+			_alloc.construct(_ptr + i, val);
 		return;
 	}
 
@@ -190,27 +201,54 @@ struct vector
 		
 	}
 
+	void shiftToRight(size_type index, size_type n)
+	{
+		reserve(_size + n);
+		iterator last = end();
+		iterator first = begin();
+
+		while( last != first + index)
+		{
+			_alloc.construct(last.base(), *(last - 1));
+			last--;
+		}
+	}
+
 	iterator insert (iterator position, const value_type& val)
 	{
-		(void)position;
-		(void)val;
-		return begin();
+		size_type index = ft::distance(begin(), position);
+		shiftToRight(index, 1);
+		_alloc.construct(_ptr + index, val);
+		_size++;
+		return position;
 	}
 
 	void insert (iterator position, size_type n, const value_type& val)
 	{
-		(void)position;
-		(void)n;
-		(void)val;
+		size_type index = ft::distance(begin(), position);
+		for (size_t i = 0; i < n; i++)
+		{
+			shiftToRight(index, 1);
+			_alloc.construct(_ptr + index, val);
+			_size++;
+		}
 		return;
 	}
 
 	template <class InputIterator>
-	void insert (iterator position, InputIterator first, InputIterator last)
+	void insert (iterator position, InputIterator first, InputIterator last ,typename ft::enable_if<!ft::is_integral<InputIterator>::value,iterator >::type = NULL)
 	{
-		(void)position;
-		(void)first;
-		(void)last;
+		size_type index = ft::distance(begin(), position);
+		size_type range = ft::distance(first, last);
+		
+
+		for (size_type i = 0; i < range; i++)
+		{
+			shiftToRight(index,1);
+			_alloc.construct(_ptr + index, *(last - 1));
+			last--;
+			_size++;
+		}
 		return;
 	}
 
@@ -219,16 +257,16 @@ struct vector
 		if(position == (end() - 1))
 		{
 			_alloc.destroy(position.base());
-			_alloc.deallocate(position.base());
+			_alloc.deallocate(position.base(), 1);
 			_size--;
 			return end();
 		}
 		
 		_alloc.destroy(position.base());
-		_alloc.deallocate(position.base());
+		_alloc.deallocate(position.base(), 1);
 		_size--;
 		size_t nbOfelementsFromPositionToEnd = 0;
-		for (position; position != end(); position++)
+		for (; position != end(); position++)
 		{
 			nbOfelementsFromPositionToEnd++;
 		}
@@ -242,7 +280,7 @@ struct vector
 
 	iterator erase (iterator first, iterator last)
 	{
-		for (first; first != last ; first++)
+		for (; first != last ; first++)
 		{
 			erase(first);
 			_size--;
@@ -257,16 +295,12 @@ struct vector
 
 	void clear()
 	{
-		size_t previousSize = _size;
-		for (size_t i = 0; i < previousSize; i++)
+		
+		for (size_t i = 0; i < _size; i++)
 		{
 			_alloc.destroy(_ptr + i);
-			
-			_size--;
 		}
-		_alloc.deallocate(_ptr,previousSize);
-		
-		
+		_size = 0;
 		return;
 	}
 
@@ -332,8 +366,20 @@ struct vector
 
 	void resize(size_type n, value_type val = value_type())
 	{
-		(void)n;
-		(void)val;
+		if(n == _size)
+			return;
+		if(n < _size)
+		{
+			for (size_type i = 0; i < n; i++)
+				_alloc.destroy((begin() + _size + i + 1).base());
+			_size = n;
+			return;
+		}
+
+		while(_size != n)
+		{
+			insert(end(),val);
+		}
 		return;
 	}
 

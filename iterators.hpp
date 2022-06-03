@@ -65,6 +65,9 @@ class random_access_iterator :  public ft::iterator<ft::random_access_iterator_t
 		random_access_iterator(const random_access_iterator& src) : _ptr(src._ptr) {}
 		virtual ~random_access_iterator() {}
 
+		template<typename U>
+  		random_access_iterator(random_access_iterator<U>);
+
 		pointer base() const
 		{
 			return _ptr; 
@@ -117,7 +120,8 @@ class random_access_iterator :  public ft::iterator<ft::random_access_iterator_t
 			return *_ptr;
 		}
 		
-		random_access_iterator operator-( difference_type diff)
+
+		random_access_iterator operator-(difference_type diff) const
 		{
 			return _ptr - diff;
 		}
@@ -125,6 +129,16 @@ class random_access_iterator :  public ft::iterator<ft::random_access_iterator_t
 		random_access_iterator operator+( difference_type diff)
 		{
 			return _ptr + diff;
+		}
+
+		difference_type operator-(random_access_iterator it)
+		{
+			return _ptr - it.base();
+		}
+
+		difference_type operator+(random_access_iterator it)
+		{
+			return _ptr + it.base();
 		}
 
 		random_access_iterator& operator+=( difference_type diff)
