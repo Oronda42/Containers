@@ -166,6 +166,22 @@ namespace ft{
       return (result);
     }
 
+    
+	template <class iterator1, class iterator2>
+	bool lexicographical_compare (iterator1 first1, iterator1 last1, iterator2 first2, iterator2 last2)
+	{
+		while ((first1 != last1) && (first2 != last2))
+		{
+			if (*first1 < *first2)
+				return (true);
+			if (*first2 < *first1)
+				return (false);
+			++first1;
+			++first2;
+		}
+		return (first1 == last1 && first2 != last2); 
+	}
+
 
 
 #endif

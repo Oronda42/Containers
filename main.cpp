@@ -234,23 +234,30 @@ int main(int argc, char const *argv[])
 	// vec.insert(vec.begin() +  2, anothervector.begin(),anothervector.end());
 	// print(vec);
 
-	ft::vector<int> vec(10);
-	ft::vector<int> vec2;
+	
+	// ft::vector<int> vec2;
 
+	// for (unsigned long int i = 0; i < vec.size(); ++i)
+	// 	vec[i] = (vec.size() - i) * 3;
+	// print(vec);
+
+	// vec.push_back(21);
+	// vec.push_back(42);
+	// vec.push_back(21);
+	// vec.push_back(42);
+
+
+	// vec2.insert(vec2.begin() + 2, vec.begin(), vec.end());
+	// vec.clear();
+	// print(vec2);
+
+	// print(vec);
+	
+	 ft::vector<int> vec(5);
 	for (unsigned long int i = 0; i < vec.size(); ++i)
-		vec[i] = (vec.size() - i) * 3;
-	print(vec);
-
-	vec.push_back(21);
-	vec.push_back(42);
-	vec.push_back(21);
-	vec.push_back(42);
-
-
-	vec2.insert(vec2.begin() + 2, vec.begin(), vec.end());
-	vec.clear();
-	print(vec2);
-
+		vec[i] = i ;
+		print(vec);
+	vec.erase(vec.begin() + 2);
 	print(vec);
 	
 
