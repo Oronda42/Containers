@@ -259,40 +259,35 @@ namespace ft {
 			reserve(_size - n);
 			iterator last = end();
 			iterator first = begin();
+			iterator curentPos = first + index;
 
-			while( last != first + index)
+			while( curentPos != last - 1 )
 			{
-				_alloc.construct(first.base(), *(first - 1));
-				first++;
+				_alloc.construct(curentPos.base(), *(curentPos + 1));
+				curentPos++;
 			}
 		}
 
-		iterator erase (iterator position)
+		iterator erase(iterator position)
 		{
-			if(position == (end() - 1))
-			{
-				_alloc.destroy(position.base());
-				_alloc.deallocate(position.base(), 1);
-				_size--;
-				return end();
-			}
-
 			size_type index = ft::distance(begin(), position);
 			shiftToLeft(index,1);
-			
 			_size--;
 			position = iterator(_ptr + index);
 			return position;
 		}
 
-		iterator erase (iterator first, iterator last)
+		iterator erase(iterator first, iterator last)
 		{
-			for (; first != last ; first++)
+			size_type index = ft::distance(begin(), first);
+			size_type range = ft::distance(first, last);
+			
+			for (size_type i = 0; i < range; i++)
 			{
-				erase(first);
+				shiftToLeft(index,1);
 				_size--;
 			}
-			return first;
+			return iterator(_ptr + index);
 		}
 
 		void swap (vector& x)

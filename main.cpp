@@ -253,7 +253,7 @@ int main(int argc, char const *argv[])
 
 	// print(vec);
 	
-	 ft::vector<int> vec(5);
+	 ft::vector<int> vec(4);
 	for (unsigned long int i = 0; i < vec.size(); ++i)
 		vec[i] = i ;
 		print(vec);
