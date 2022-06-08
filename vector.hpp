@@ -35,10 +35,10 @@ namespace ft {
 		typedef typename Alloc::const_pointer								const_pointer;
 		typedef	typename ft::random_access_iterator<T>						iterator;
 		typedef	typename ft::random_access_iterator<const T> 				const_iterator;
-		typedef	typename std::reverse_iterator<iterator>					reverse_iterator;
-		typedef	typename std::reverse_iterator<const iterator>				const_reverse_iterator;
+		typedef	typename ft::reverse_iterator<iterator>						reverse_iterator;
+		typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 		typedef	typename ft::iterator_traits<iterator>::difference_type		difference_type;
-		typedef std::size_t						size_type;
+		typedef typename allocator_type::size_type							size_type;
 
 
 	//----------MEMBER FUNCTIONS------------
@@ -247,8 +247,8 @@ namespace ft {
 			for (size_type i = 0; i < range; i++)
 			{
 				shiftToRight(index,1);
-				_alloc.construct(_ptr + index, *(last - 1));
-				last--;
+				_alloc.construct(_ptr + index, *(--last));
+				// last--;
 				_size++;
 			}
 			return;
@@ -292,8 +292,18 @@ namespace ft {
 
 		void swap (vector& x)
 		{
-			(void)x;
-			return;
+			size_type tmp_capacity = _capacity;
+			size_type tmp__size = _size;
+			pointer tmp_ptr = _ptr;
+
+			_size = x._size;
+			_capacity = x._capacity;
+			_ptr = x._ptr;
+
+			x._capacity =  tmp_capacity;
+			x._size = tmp__size;
+			x._ptr = tmp_ptr;
+
 		}
 
 		void clear()
@@ -426,7 +436,7 @@ namespace ft {
 	};
 
 
-	//----------NON MEMBER FUNCS-----------
+	//----------NON MEMBER FUNCS OVERLOADS-----------
 
 
 	template <class T, class Alloc>
