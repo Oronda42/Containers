@@ -13,6 +13,7 @@
 
 
 #include "vector.hpp"
+#include "map.hpp"
 #include <vector>
 #include <iostream>
 
@@ -253,12 +254,18 @@ int main(int argc, char const *argv[])
 
 	// print(vec);
 	
-	 ft::vector<int> vec(4);
-	for (unsigned long int i = 0; i < vec.size(); ++i)
-		vec[i] = i ;
-		print(vec);
-	vec.erase(vec.begin() + 2);
-	print(vec);
+	//  ft::vector<int> vec(4);
+	// for (unsigned long int i = 0; i < vec.size(); ++i)
+	// 	vec[i] = i ;
+	// 	print(vec);
+	// vec.erase(vec.begin() + 2);
+	// print(vec);
+
+	//ft::map<int, std::string> pouet;
+	
+	ft::pair<int, std::string> p(42,"coucou");
+	
+	std::cout << p;
 	
 
 	return 0;
