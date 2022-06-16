@@ -47,33 +47,30 @@ class map
     typedef typename allocator_type::const_reference					const_reference;
     typedef typename allocator_type::pointer							pointer;
     typedef typename allocator_type::const_pointer						const_pointer;
-	typedef	typename ft::BST<value_type>::iterator			            iterator;
-	typedef	typename ft::BST<value_type>::const_iterator	            const_iterator;
-	// typedef	typename ft::reverse_iterator<iterator>						reverse_iterator;
-	// typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+	
     typedef	typename allocator_type::difference_type				    difference_type;
 	typedef typename allocator_type::size_type							size_type;
 
-	private:
-	//add compare template
-	typedef typename ft::BST<value_type>									tree;
-    typedef typename tree::node_type					    node_type;
-    typedef typename tree::node_pointer					node_pointer;
-    typedef typename tree::node_reference				node_reference;
-    typedef typename tree::node_const_pointer			node_const_pointer;
-    typedef typename tree::node_const_reference			node_const_reference;
+	typedef typename ft::BST<value_type>					tree;
+    typedef typename tree::node_type					                node_type;
+    typedef typename tree::node_pointer					                node_pointer;
+    typedef typename tree::node_reference				                node_reference;
+    typedef typename tree::node_const_pointer			                node_const_pointer;
+    typedef typename tree::node_const_reference			                node_const_reference;
+
+    typedef	typename tree::iterator			                            iterator;
+	typedef	typename tree::const_iterator	                            const_iterator;
+	// typedef	typename ft::reverse_iterator<iterator>						reverse_iterator;
+	// typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 	public:
 
 
 	//empty (1)	
-	explicit map (const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type())
-	{
-		//_root = NULL;
-		_size = 0;
-		_comp = comp;
-		_alloc = alloc;
-	}
+	explicit map (const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type()) : 
+        _comp(comp), _alloc(alloc), _size(0)  {}
+	
+	
 				
 	// //range (2)	
 	// template <class InputIterator>

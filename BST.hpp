@@ -248,7 +248,7 @@ class BST
                     if(current == NULL)
                     {
                         parent->right = new_node;
-						new_node->right = _last;
+						new_node->right = &_last;
                         break;
                     }
                 }
