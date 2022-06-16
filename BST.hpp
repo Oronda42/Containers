@@ -11,7 +11,6 @@ namespace ft{
 
 
 
-
 template <typename Tree >
 class BSTIterator {
 public:
@@ -35,7 +34,7 @@ public:
     node_pointer operator->() { return _node; }
 	
     BSTIterator& operator++() {
-       _node = Tree::inOrderTraversal(_node);
+       _node = Tree::next(_node);
 		return (*this);
     }
     BSTIterator operator++(int) {
@@ -57,6 +56,8 @@ public:
         --*this;
         return temp;
     }
+
+	
     
 private:
     node_pointer _node;
@@ -72,6 +73,7 @@ class Node_base
         Node_base<T> *left;
         Node_base<T> *right;
 		Node_base<T> *parent;
+
         Node_base() : left(NULL), right(NULL), parent(NULL), m_value() {}
         Node_base(T& value) : left(NULL), right(NULL), parent(NULL), m_value(value) {}
         Node_base (const Node_base<T>& other) : left(other->left), right(other->right), parent(other->parent), m_value(other.m_value) {}
@@ -102,7 +104,7 @@ class BST
   
    
    
-        BST(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare() ) : _root(NULL), _alloc(alloc), _comp(comp) {}
+        BST(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare() ) : _root(NULL), _last(), _alloc(alloc), _comp(comp)  {}
        
         ~BST(){};
 
@@ -146,14 +148,11 @@ class BST
 				preTraversal(node->right);
 			}
 		}
-
-		iterator begin()
-		{
-			return iterator(_root);
-		}
+		
 
 		node_pointer GetMin(node_pointer root)
 		{
+
 			if(root->left == NULL)
 				return root;
 			else
@@ -165,9 +164,6 @@ class BST
 			return GetMin(_root);
 		}
 		
-
-		
-
 		node_pointer GetMax(node_pointer root)
 		{
 			if(root->right == NULL)
@@ -180,6 +176,44 @@ class BST
 		{
 			return GetMax(_root);
 		}
+
+		iterator begin()
+		{
+			node_pointer temp = GetMin(_root);
+			return iterator(temp);
+		}	
+
+		node_pointer next(node_pointer n)
+		{
+			// Gets the next node in an in-order traversal of the tree; returns null
+
+			if (!n) { return n; }
+
+			// If the node has a right child, we traverse the link to that child
+			// then traverse as far to the left as we can:
+			if (n->right_)
+			{
+				n = n->right_;
+				while (n->left_) { n = n->left_; }
+			}
+			// If the node is the left node of its parent, the next node is its
+			// parent node:
+			else if (n->parent_ && n == n->parent_->left_)
+			{
+				n = n->parent_;
+			}
+			// Otherwise, this node is the furthest right in its subtree; we 
+			// traverse up through its parents until we find a parent that was a
+			// left child of a node.  The next node is that node's parent.  If 
+			// we have reached the end, this will set node to null:
+			else
+			{
+				while (n->parent_ && n == n->parent_->right_) { n = n->parent_; }
+				n = n->parent_;
+			}
+			return n;
+		}
+		
 
         bool insert(T value)
         {
@@ -195,7 +229,7 @@ class BST
             node_pointer current = _root;
             node_pointer parent;
            
-            while (current != NULL)
+            while (current && current != &_last)
             {
                 parent = current;
                
@@ -214,6 +248,7 @@ class BST
                     if(current == NULL)
                     {
                         parent->right = new_node;
+						new_node->right = _last;
                         break;
                     }
                 }
@@ -257,6 +292,7 @@ class BST
         }
         private:
             node_pointer _root;
+			node_type _last;
             allocator_type _alloc;
             key_compare _comp;
 };

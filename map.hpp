@@ -26,12 +26,12 @@ class map
     typedef T											mapped_type;
     typedef ft::pair<const Key, T>	   					value_type;
     typedef Compare                                     key_compare;
-	class Value_compare
+	class value_compare
 	{   
 		friend class map;
 		protected:
 			Compare comp;
-			Value_compare (Compare c) : comp(c) {}  
+			value_compare (Compare c) : comp(c) {}  
 		public:
 			typedef bool result_type;
 			typedef value_type first_argument_type;
@@ -41,7 +41,7 @@ class map
 				return comp(x.first, y.first);
 			}
 	};
-	typedef Value_compare												value_compare;
+	
     typedef Alloc                                       				allocator_type;
     typedef typename allocator_type::reference							reference;
     typedef typename allocator_type::const_reference					const_reference;
@@ -54,19 +54,22 @@ class map
     typedef	typename allocator_type::difference_type				    difference_type;
 	typedef typename allocator_type::size_type							size_type;
 
+	private:
+	//add compare template
 	typedef typename ft::BST<value_type>									tree;
+    typedef typename tree::node_type					    node_type;
+    typedef typename tree::node_pointer					node_pointer;
+    typedef typename tree::node_reference				node_reference;
+    typedef typename tree::node_const_pointer			node_const_pointer;
+    typedef typename tree::node_const_reference			node_const_reference;
 
-    typedef typename ft::BST<value_type>::node_type					    node_type;
-    typedef typename ft::BST<value_type>::node_pointer					node_pointer;
-    typedef typename ft::BST<value_type>::node_reference				node_reference;
-    typedef typename ft::BST<value_type>::node_const_pointer			node_const_pointer;
-    typedef typename ft::BST<value_type>::node_const_reference			node_const_reference;
+	public:
 
 
 	//empty (1)	
 	explicit map (const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type())
 	{
-		_root = NULL;
+		//_root = NULL;
 		_size = 0;
 		_comp = comp;
 		_alloc = alloc;
@@ -103,19 +106,20 @@ class map
 	// }
 
 
-	// iterator begin()
-	// {
-		
-	// }
+	iterator begin()
+	{
+		return  _tree.begin();
+	}
 
 	// const_iterator begin() const
 	// {
 		
 	// }
 
-	// iterator end()
-	// {
-	// }
+	iterator end()
+	{
+		return iterator( _tree.GetMax());
+	}
 
 	// const_iterator end() const
 	// {
@@ -161,7 +165,8 @@ class map
 	pair<iterator,bool> insert (const value_type& val)
 	{
 		bool result = _tree.insert(val);
-		_size++;
+		if(result)
+			_size++;
 		return (pair<iterator,bool>(find(val.first), result));
 	}
 
@@ -256,7 +261,6 @@ class map
         key_compare _comp;
         allocator_type _alloc;
         size_type _size;
-        node_pointer _root;
 
 
 };
