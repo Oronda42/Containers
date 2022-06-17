@@ -9,18 +9,22 @@ int main(int argc, char const *argv[])
 {
     //ft::BST<std::string> bst;
     ft::map<std::string, int> pouet;
-     pouet.insert(ft::make_pair("xouic", 2));
-     pouet.insert(ft::make_pair("prout", 1));
-	 pouet.insert(ft::make_pair("coucou", 3));
-	 pouet.insert(ft::make_pair("zemour", 5));
-	 pouet.insert(ft::make_pair("asef", 10));
+    
+    pouet.insert(ft::make_pair("d", 0));
+	pouet.insert(ft::make_pair("c", 0));
+	pouet.insert(ft::make_pair("a", 0));
+	pouet.insert(ft::make_pair("z", 0));
+	pouet.insert(ft::make_pair("x", 0));
 
     ft::map<std::string, int>::iterator it = pouet.begin();
 	ft::map<std::string, int>::iterator ite = pouet.end();
 
-    std::cout << it->m_value.first << " " << it->m_value.second << std::endl;
-	
-	    std::cout << ite->m_value.first << " " << ite->m_value.second << std::endl;
+    // std::cout << it->m_value.first << " " << it->m_value.second << std::endl;
+	// std::cout << ite->m_value.first << " " << ite->m_value.second << std::endl << std::endl;
+    std::cout << it->m_value.first <<  std::endl;
+	std::cout << ite->m_value.first << std::endl << std::endl;
+
+	pouet.print();
 
 	
     

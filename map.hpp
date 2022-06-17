@@ -255,6 +255,11 @@ class map
 		return _alloc;
 	}
 
+	void print()
+	{
+		_tree.inOrderTraversal();
+	}
+
     private:
 		tree _tree;
         key_compare _comp;

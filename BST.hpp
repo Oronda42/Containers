@@ -83,7 +83,7 @@ class Node_base
  
 
 
-template<class T, class Compare = std::less<typename T::first_type>, class BSTNode = Node_base<T>, class Alloc = std::allocator<Node_base<T> > >
+template<class T, class Compare = std::less<T>, class BSTNode = Node_base<T>, class Alloc = std::allocator<Node_base<T> > >
 class BST
 {
     public :
@@ -112,7 +112,7 @@ class BST
 			else
 			{
 				inOrderTraversal(node->left);
-				std::cout << node->m_value << " " << std::endl;
+				std::cout << node->m_value.first << " " ;
 				inOrderTraversal(node->right);
 			}
 		}
@@ -137,7 +137,7 @@ class BST
 		void preOrderTraversal(node_pointer node)
 		{
 			if(node == NULL)
-				return ;
+				return;
 			else
 			{
 				std::cout << node->value << " " << std::endl;
@@ -163,15 +163,10 @@ class BST
 		
 		node_pointer GetMax(node_pointer root)
 		{
-			// if(root->right == NULL)
-			// 	return root;
-			
-			// else
-			// 	return GetMax(root->right);
-
-			while(root->right != NULL)
-				root = root->right;
-			return root;
+			if(root->right == NULL)
+				return root;
+			else
+				return GetMax(root->right);
 		}
 
 		node_pointer GetMax()
@@ -258,7 +253,8 @@ class BST
                     if(current == NULL)
                     {
                         parent->right = new_node;
-						new_node->right = &_last;
+						node_pointer max = GetMax();
+						max->right = &_last;
                         break;
                     }
                 }
