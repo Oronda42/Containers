@@ -29,9 +29,11 @@ class map
 	class value_compare
 	{   
 		friend class map;
+		friend class BST<value_type, value_compare>;
 		protected:
 			Compare comp;
-			value_compare (Compare c) : comp(c) {}  
+			value_compare (Compare c) : comp(c) {} 
+			value_compare (const value_compare& c) : comp(c.comp) {}
 		public:
 			typedef bool result_type;
 			typedef value_type first_argument_type;
@@ -51,7 +53,7 @@ class map
     typedef	typename allocator_type::difference_type				    difference_type;
 	typedef typename allocator_type::size_type							size_type;
 
-	typedef typename ft::BST<value_type>					tree;
+	typedef typename ft::BST<value_type, value_compare>								tree;
     typedef typename tree::node_type					                node_type;
     typedef typename tree::node_pointer					                node_pointer;
     typedef typename tree::node_reference				                node_reference;
@@ -68,7 +70,7 @@ class map
 
 	//empty (1)	
 	explicit map (const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type()) : 
-        _comp(comp), _alloc(alloc), _size(0)  {}
+        _comp(comp), _alloc(alloc), _size(0), _tree(allocator_type(), value_compare(comp))  {}
 	
 	
 				

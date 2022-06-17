@@ -83,12 +83,12 @@ class Node_base
  
 
 
-template<class T, class BSTNode = Node_base<T>, class Compare = std::less<T>, class Alloc = std::allocator<Node_base<T> > >
+template<class T, class Compare = std::less<typename T::first_type>, class BSTNode = Node_base<T>, class Alloc = std::allocator<Node_base<T> > >
 class BST
 {
     public :
 
-		typedef BST<T, BSTNode, Compare, Alloc> 								self_type;
+		typedef BST<T,  Compare, BSTNode ,Alloc> 								self_type;
 		typedef T 																value_type;
 		typedef	 Alloc 													    	allocator_type;
 		typedef Compare                                                     	key_compare;
@@ -101,9 +101,6 @@ class BST
 		typedef const node_type*                                                node_const_pointer;
 		typedef const node_type&                                                node_const_reference;
 
-  
-   
-   
         BST(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare() ) : _root(NULL), _last(), _alloc(alloc), _comp(comp)  {}
        
         ~BST(){};
@@ -166,10 +163,15 @@ class BST
 		
 		node_pointer GetMax(node_pointer root)
 		{
-			if(root->right == NULL)
-				return root;
-			else
-				return GetMax(root->right);
+			// if(root->right == NULL)
+			// 	return root;
+			
+			// else
+			// 	return GetMax(root->right);
+
+			while(root->right != NULL)
+				root = root->right;
+			return root;
 		}
 
 		node_pointer GetMax()
@@ -181,6 +183,11 @@ class BST
 		{
 			node_pointer temp = GetMin(_root);
 			return iterator(temp);
+		}	
+
+		iterator end()
+		{
+			return _last;
 		}	
 
 		node_pointer next(node_pointer n)
@@ -208,7 +215,10 @@ class BST
 			// we have reached the end, this will set node to null:
 			else
 			{
-				while (n->parent_ && n == n->parent_->right_) { n = n->parent_; }
+				while (n->parent_ && n == n->parent_->right_) 
+				{
+					n = n->parent_; 
+				}
 				n = n->parent_;
 			}
 			return n;
