@@ -40,7 +40,8 @@ class map
 			typedef value_type second_argument_type;
 			bool operator() (const value_type& x, const value_type& y) const
 			{
-				return comp(x.first, y.first);
+                bool result = comp(x.first, y.first);
+				return result;
 			}
 	};
 	
@@ -53,7 +54,7 @@ class map
     typedef	typename allocator_type::difference_type				    difference_type;
 	typedef typename allocator_type::size_type							size_type;
 
-	typedef typename ft::BST<value_type, value_compare>								tree;
+	typedef typename ft::BST<value_type, value_compare>					tree;
     typedef typename tree::node_type					                node_type;
     typedef typename tree::node_pointer					                node_pointer;
     typedef typename tree::node_reference				                node_reference;
@@ -62,8 +63,8 @@ class map
 
     typedef	typename tree::iterator			                            iterator;
 	typedef	typename tree::const_iterator	                            const_iterator;
-	// typedef	typename ft::reverse_iterator<iterator>						reverse_iterator;
-	// typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+	typedef	typename ft::reverse_iterator<iterator>						reverse_iterator;
+	typedef	typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 
 	public:
 
@@ -105,40 +106,45 @@ class map
 	// }
 
 
-	iterator begin()
+	iterator begin() 
 	{
 		return  _tree.begin();
 	}
 
-	// const_iterator begin() const
-	// {
-		
-	// }
-
-	iterator end()
+	const_iterator begin() const
 	{
-		return iterator( _tree.GetMax());
+		return  _tree.begin();
 	}
 
-	// const_iterator end() const
-	// {
-	// }
+	iterator end() 
+	{
+        return _tree.end();
+	}
 
-	// reverse_iterator rbegin()
-	// {
-	// }
+	const_iterator end() const
+	{
+        return _tree.end();
+	}
 
-	// const_reverse_iterator rbegin() const
-	// {
-	// }
+	reverse_iterator rbegin()
+	{
+        return _tree.rbegin();
+	}
 
-	// reverse_iterator rend()
-	// {
-	// }
+	const_reverse_iterator rbegin() const
+	{
+        return _tree.rbegin();
+	}
 
-	// const_reverse_iterator rend() const
-	// {
-	// }
+	reverse_iterator rend()
+	{
+        return _tree.rend();
+	}
+
+	const_reverse_iterator rend() const
+	{
+        return _tree.rend();
+	}
 
 	bool empty() const
 	{
@@ -147,7 +153,7 @@ class map
 
 	size_type size() const
 	{
-		return (_size);
+		return (_tree._size);
 	}
 
 	size_type max_size() const
@@ -163,24 +169,26 @@ class map
 	//single element (1)	
 	pair<iterator,bool> insert (const value_type& val)
 	{
-		bool result = _tree.insert(val);
-		if(result)
-			_size++;
-		return (pair<iterator,bool>(find(val.first), result));
+		return (pair<iterator,bool>(find(val.first), _tree.insert(val)));
 	}
 
-	// //with hint (2)	
-	// iterator insert (iterator position, const value_type& val)
-	// {
-		
-	// }
+	//with hint (2)	
+	iterator insert (iterator position, const value_type& val)
+	{
+        (void) position;
+        return (find(val.first), _tree.insert(val));
+	}
 
-	// //range (3)	
-	// template <class InputIterator>
-  	// void insert (InputIterator first, InputIterator last)
-	// {
-		
-	// }
+	//range (3)	
+	template <class InputIterator>
+  	void insert (InputIterator first, InputIterator last)
+	{
+		while (first!=last)
+        {
+            insert(*first++);
+        }
+        
+	}
 
 
 	// void erase (iterator position)
@@ -255,9 +263,17 @@ class map
 		return _alloc;
 	}
 
-	void print()
-	{
-		_tree.inOrderTraversal();
+	void print2D()
+	{   
+        std::cout << "size: " << _size << std::endl;
+		_tree.print2d();
+	}
+
+    void printinOrder()
+	{   
+        std::cout << std::endl;
+		_tree.print_tree_inOrder();
+        std::cout << std::endl;
 	}
 
     private:

@@ -32,13 +32,22 @@ public:
     BSTIterator(node_pointer node) : _node(node) {}
     node_reference operator*() { return *_node; }
     node_pointer operator->() { return _node; }
+
+
+    //for non-const iterator to const iterator
+    operator BSTIterator<const Tree> () const
+    { 
+        return (BSTIterator<const Tree>(this->_node));
+    }
 	
     BSTIterator& operator++() {
        _node = Tree::next(_node);
 		return (*this);
     }
     BSTIterator operator++(int) {
-
+        BSTIterator tmp = *this;
+        ++(*this);
+        return tmp;
     }
     bool operator==(const BSTIterator& rhs) {
         return _node == rhs._node;
@@ -48,7 +57,7 @@ public:
     }
     
     BSTIterator& operator--() {
-        _node = _node->prev;
+        _node = Tree::prev(_node);
         return *this;
     }
     BSTIterator operator--(int) {
@@ -56,6 +65,7 @@ public:
         --*this;
         return temp;
     }
+
 
 	
     
@@ -76,7 +86,7 @@ class Node_base
 
         Node_base() : left(NULL), right(NULL), parent(NULL), m_value() {}
         Node_base(T& value) : left(NULL), right(NULL), parent(NULL), m_value(value) {}
-        Node_base (const Node_base<T>& other) : left(other->left), right(other->right), parent(other->parent), m_value(other.m_value) {}
+        Node_base (const Node_base<T>& other) : left(other.left), right(other.right), parent(other.parent), m_value(other.m_value) {}
         
 };
 
@@ -91,6 +101,7 @@ class BST
 		typedef BST<T,  Compare, BSTNode ,Alloc> 								self_type;
 		typedef T 																value_type;
 		typedef	 Alloc 													    	allocator_type;
+        typedef typename allocator_type::size_type                              size_type;
 		typedef Compare                                                     	key_compare;
 		typedef typename ft::BSTIterator<self_type>                         	iterator;
 		typedef typename ft::BSTIterator<const self_type>                   	const_iterator;
@@ -100,8 +111,15 @@ class BST
 		typedef node_type&                                                      node_reference;
 		typedef const node_type*                                                node_const_pointer;
 		typedef const node_type&                                                node_const_reference;
+       
+       
 
-        BST(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare() ) : _root(NULL), _last(), _alloc(alloc), _comp(comp)  {}
+        BST(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare() ) : 
+        _root(NULL), 
+        _last(), 
+        _alloc(alloc), 
+        _comp(comp)  
+        {}
        
         ~BST(){};
 
@@ -163,7 +181,7 @@ class BST
 		
 		node_pointer GetMax(node_pointer root)
 		{
-			if(root->right == NULL)
+			if(root->right == NULL || root->right == &_last)
 				return root;
 			else
 				return GetMax(root->right);
@@ -182,10 +200,11 @@ class BST
 
 		iterator end()
 		{
-			return _last;
+            iterator temp = iterator(&_last);
+			return temp--;
 		}	
 
-		node_pointer next(node_pointer n)
+		static node_pointer next(node_pointer n)
 		{
 			// Gets the next node in an in-order traversal of the tree; returns null
 
@@ -193,16 +212,16 @@ class BST
 
 			// If the node has a right child, we traverse the link to that child
 			// then traverse as far to the left as we can:
-			if (n->right_)
+			if (n->right)
 			{
-				n = n->right_;
-				while (n->left_) { n = n->left_; }
+				n = n->right;
+				while (n->left) { n = n->left; }
 			}
 			// If the node is the left node of its parent, the next node is its
 			// parent node:
-			else if (n->parent_ && n == n->parent_->left_)
+			else if (n->parent && n == n->parent->left)
 			{
-				n = n->parent_;
+				n = n->parent;
 			}
 			// Otherwise, this node is the furthest right in its subtree; we 
 			// traverse up through its parents until we find a parent that was a
@@ -210,17 +229,65 @@ class BST
 			// we have reached the end, this will set node to null:
 			else
 			{
-				while (n->parent_ && n == n->parent_->right_) 
+				while (n->parent && n == n->parent->right) 
 				{
-					n = n->parent_; 
+					n = n->parent; 
 				}
-				n = n->parent_;
+				n = n->parent;
 			}
 			return n;
 		}
-		
 
-        bool insert(T value)
+       static  node_pointer prev(node_pointer n)
+        {
+            // Gets the previous node in an in-order traversal of the tree; returns null
+            if (!n) { return n; }
+            // If the node has a left child, we traverse the link to that child
+            // then traverse as far to the right as we can:
+            if (n->left)
+            {
+                n = n->left;
+                while (n->right) { n = n->right; }
+            }
+            // If the node is the right node of its parent, the previous node is its
+            // parent node:
+            else if (n->parent && n == n->parent->right)
+            {
+                n = n->parent;
+            }
+            // Otherwise, this node is the furthest left in its subtree; we 
+            // traverse up through its parents until we find a parent that was a
+            // right child of a node.  The previous node is that node's parent.  If 
+            // we have reached the end, this will set node to null:
+            else
+            {
+                while (n->parent && n == n->parent->left) 
+                {
+                    n = n->parent; 
+                }
+                n = n->parent;
+            }
+            return n;
+        }
+		
+        
+        bool isInf(const value_type& lhs, const value_type& rhs) const
+        {
+            return _comp(lhs, rhs);
+        }
+        bool isEqual(const value_type& lhs, const value_type& rhs) const
+        { 
+            return (!_comp(lhs, rhs) && !_comp(rhs, lhs)); 
+        }
+      
+        bool isSup(const value_type& lhs, const value_type& rhs) const
+        {
+            return (!_comp(lhs, rhs) && !isEqual(lhs, rhs));
+        }
+
+        
+
+        bool insert( T value)
         {
             node_pointer new_node = _alloc.allocate(1);
             _alloc.construct(new_node, value);
@@ -238,33 +305,40 @@ class BST
             {
                 parent = current;
                
-                if (_comp(value, current->m_value) > 0)
+                if (isInf(value, current->m_value))
                 {
                     current = current->left;
                     if(current == NULL)
                     {
                         parent->left = new_node;
+                        new_node->parent = parent;
                         break;
                     }
                 }
-                else if(_comp(value, current->m_value) < 0)
+                else if(isSup(value, current->m_value))
                 {
+                    
                     current = current->right;
-                    if(current == NULL)
+                    if(current == NULL || current == &_last)
                     {
                         parent->right = new_node;
-						node_pointer max = GetMax();
-						max->right = &_last;
+                        new_node->parent = parent;
                         break;
                     }
+                   
                 }
-                else
+                else if (isEqual(value, current->m_value))
                 {
-                    current = new_node;
+                    std::cout << "WARNING equal Key" << std::endl;
                     return false;
                 }
             }
-             return true;
+            
+            node_pointer max = GetMax();
+            max->right = &_last;
+            _last.parent = max;
+            _size++;
+            return true;
         }
 
         node_pointer find(T value)
@@ -281,26 +355,63 @@ class BST
             }
             return NULL;
         }
-        void print_tree()
+        void print_tree_inOrder()
         {
+            std::cout << "inorder: ";
             print_tree(_root);
         }
 
         void print_tree(node_pointer node)
         {
-            if (node == NULL)
-            {
+            if (node == NULL || node == &_last)
                 return;
-            }
+            
             print_tree(node->left);
-            std::cout << node->value << std::endl;
+            std::cout << node->m_value.first << " " ;
             print_tree(node->right);
+        }
+
+        #define COUNT 5
+
+        void print2d(node_pointer node, int space)
+        {
+            if (node == NULL)
+                return;
+            space += COUNT;
+           
+            print2d(node->right, space);
+             
+            std::cout << std::endl;
+            for (int i = COUNT; i < space; i++)
+                std::cout << " ";
+            if(node == &_last)
+            {
+                std::cout << "LAST" << std::endl;
+            }
+            else
+            {
+                std::cout << node->m_value.first << std::endl;
+            }
+            
+            print2d(node->left, space);
+        }
+
+        void print2d()
+        {
+           
+            print2d(_root, COUNT);
+        }
+
+        node_pointer GetRoot()
+        {
+            return _root;
         }
         private:
             node_pointer _root;
 			node_type _last;
             allocator_type _alloc;
             key_compare _comp;
+            size_type _size;
 };
 
 }
