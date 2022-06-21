@@ -3,32 +3,49 @@
 #include "BST.hpp"
 #include <iostream>
 #include "map.hpp"
+#include "utils.hpp"
+
+#define T1 int
+#define T2 std::string
+typedef ft::map<T1, T2>::value_type T3;
+typedef ft::map<T1, T2>::iterator iterator;
+
+static int iter = 0;
 
 
 int main(int argc, char const *argv[])
 {
-    //ft::BST<std::string> bst;
-    ft::map<std::string, int> pouet;
     
-    pouet.insert(ft::make_pair("50", 0));
-	pouet.insert(ft::make_pair("25", 1));
-	pouet.insert(ft::make_pair("75", 2));
-	pouet.insert(ft::make_pair("10", 0));
-	pouet.insert(ft::make_pair("20", 0));
-    pouet.insert(ft::make_pair("20", 1));
+     //ft::map<std::string, int> pouet;
+    
+    //  pouet.insert(ft::pair<int,int>(50, 0));
+	//   pouet.insert(ft::pair<int,int>(25, 1));
+	//  pouet.insert(ft::pair<int,int>(75, 2));
+	//  pouet.insert(ft::pair<int,int>(10, 0));
+	//  pouet.insert(ft::pair<int,int>(20, 0));
+    //  pouet.insert(ft::pair<int,int>(20, 1));
    
 
-    ft::map<std::string, int>::iterator it = pouet.begin();
-	ft::map<std::string, int>::iterator ite = pouet.end();
-    ++it;
-    --ite;
+    // ft::map<int, int>::iterator it = pouet.begin();
+	// ft::map<int, int>::iterator ite = pouet.end();
+    // ft::map<int, int>::const_iterator cit = pouet.begin();
+	// ft::map<int, int>::const_iterator cite = pouet.end();
 
+    
+     
+    // ft::pair<int,int> tmp = ft::make_pair(100, 10);
+    // tmp.first = 200;
    
-     std::cout << it->m_value.first <<  std::endl;
-	 std::cout << ite->m_value.first << std::endl << std::endl;
+    // std::cout << "itb: " << it->first <<  std::endl;
+    // std::cout << "ite: " <<ite->first << std::endl;
+    // std::cout << "citb: " <<cit->first <<  std::endl;
+    // std::cout << "cite: " <<cite->first << std::endl << std::endl;
 
-	pouet.print2D();
-    pouet.printinOrder();
+    // for (; it != ite; ++it)
+	// 		std::cout << "- " << it->first << std::endl;
+
+	//  pouet.print2D();
+    // pouet.printinOrder();
 
 	
     
@@ -44,6 +61,7 @@ int main(int argc, char const *argv[])
 
     // std::cout << "Min value : " << bst.GetMin()->m_value << std::endl;
     // std::cout << "Max value : " << bst.GetMax()->m_value << std::endl;
+
      
     return 0;
 }

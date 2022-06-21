@@ -33,18 +33,18 @@ int main(int argc, char const *argv[])
 {
 	(void)argc;
 	(void)argv;
-	// std::cout <<  "/////////// INT PUSH POP //////////// " << std::endl;
-	// {
-	// 	std::cout <<  "** ORIGINAL **" << std::endl;
-	// 	std::vector<int> vec;
-	// 	vec.push_back(10);
-	// 	vec.push_back(11);
-	// 	vec.push_back(12);
-	// 	vec.push_back(13);
-	// 	vec.pop_back();
-	// 	print(vec, "vec");
+	std::cout <<  "/////////// INT PUSH POP //////////// " << std::endl;
+	{
+		std::cout <<  "** ORIGINAL **" << std::endl;
+		std::vector<int> vec;
+		vec.push_back(10);
+		vec.push_back(11);
+		vec.push_back(12);
+		vec.push_back(13);
+		vec.pop_back();
+		print(vec, "vec");
 		
-	// }
+	 }
 	// {
 	// 	std::cout <<  "** FT **" << std::endl;
 	// 	ft::vector<int> vec;
@@ -265,7 +265,7 @@ int main(int argc, char const *argv[])
 	
 	ft::pair<int, std::string> p(42,"coucou");
 	
-	std::cout << p;
+	//std::cout << p;
 	
 
 	return 0;

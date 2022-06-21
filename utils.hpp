@@ -298,12 +298,12 @@ namespace ft{
     return !(x < y); 
   }
 
-template <typename Tkey, typename Tvalue>
-std::ostream	&operator<<(std::ostream &os, pair<Tkey, Tvalue> const &src)
-{
-	std::cout << "key = " << src.first << ", value = " << src.second << " ";
-	return (os);
-};
+    // template <typename Tkey, typename Tvalue>
+    // std::ostream	&operator<<(std::ostream &os, pair<Tkey, Tvalue> const &src)
+    // {
+    //     std::cout << "key = " << src.first << ", value = " << src.second << " ";
+    //     return (os);
+    // };
 
   template <class T1,class T2>
   ft::pair<T1,T2> make_pair (T1 x, T2 y)

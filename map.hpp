@@ -71,30 +71,32 @@ class map
 
 	//empty (1)	
 	explicit map (const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type()) : 
-        _comp(comp), _alloc(alloc), _size(0), _tree(allocator_type(), value_compare(comp))  {}
+       _tree(allocator_type(), value_compare(comp)),  _comp(comp), _alloc(alloc), _size(0)   {}
 	
 	
 				
-	// //range (2)	
-	// template <class InputIterator>
-	// map (InputIterator first, InputIterator last,const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type())
-	// {
-	// 	_root = NULL;
-	// 	_size = 0;
-	// 	_comp = comp;
-	// 	_alloc = alloc;
-	// 	insert(first, last);
-	// }
+	//range (2)	
+
+	template <class InputIterator>
+	map (InputIterator first, InputIterator last,const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type())
+	{
+		_size = 0;
+		_comp = comp;
+		_alloc = alloc;
+        _tree(allocator_type(), value_compare(comp))
+		insert(first, last);
+         
+	}
 		
-	// //copy (3)	
-	// map (const map& x)
-	// {
-	// 	_root = NULL;
-	// 	_size = x._size;
-	// 	_comp = x._comp;
-	// 	_alloc = x._alloc;
-	// 	insert(x.begin(), x.end());
-	// }
+	//copy (3)	
+	map (const map& x)
+	{
+		_root = NULL;
+		_size = x._size;
+		_comp = x._comp;
+		_alloc = x._alloc;
+		insert(x.begin(), x.end());
+	}
 
 	// ~map()
 	// {
@@ -126,25 +128,25 @@ class map
         return _tree.end();
 	}
 
-	reverse_iterator rbegin()
-	{
-        return _tree.rbegin();
-	}
+	// reverse_iterator rbegin()
+	// {
+    //     return _tree.rbegin();
+	// }
 
-	const_reverse_iterator rbegin() const
-	{
-        return _tree.rbegin();
-	}
+	// const_reverse_iterator rbegin() const
+	// {
+    //     return _tree.rbegin();
+	// }
 
-	reverse_iterator rend()
-	{
-        return _tree.rend();
-	}
+	// reverse_iterator rend()
+	// {
+    //     return _tree.rend();
+	// }
 
-	const_reverse_iterator rend() const
-	{
-        return _tree.rend();
-	}
+	// const_reverse_iterator rend() const
+	// {
+    //     return _tree.rend();
+	// }
 
 	bool empty() const
 	{
@@ -153,13 +155,16 @@ class map
 
 	size_type size() const
 	{
-		return (_tree._size);
+		return (_tree.GetSize());
 	}
 
 	size_type max_size() const
 	{
-		return (_alloc.max_size());
+         
+		return std::allocator<node_type>().max_size();
 	}
+
+  
 
 	// mapped_type& operator[] (const key_type& k)
 	// {
@@ -176,14 +181,15 @@ class map
 	iterator insert (iterator position, const value_type& val)
 	{
         (void) position;
-        return (find(val.first), _tree.insert(val));
+        _tree.insert(val);
+        return iterator(find(val.first));
 	}
 
 	//range (3)	
 	template <class InputIterator>
   	void insert (InputIterator first, InputIterator last)
 	{
-		while (first!=last)
+		while (first != last)
         {
             insert(*first++);
         }
@@ -226,7 +232,7 @@ class map
 	iterator find (const key_type& k)
 	{
 		node_pointer p = _tree.find(value_type(k, T()));
-		return NULL;
+		return iterator( p);
 	}
 	// const_iterator find (const key_type& k) const
 	// {
@@ -237,19 +243,23 @@ class map
 	// {
 	// }
 
-	// iterator lower_bound (const key_type& k)
-	// {
-	// }
-	// const_iterator lower_bound (const key_type& k) const
-	// {
-	// }
+	iterator lower_bound (const key_type& k)
+	{
+        return _tree.lower_bound(k);
+	}
+	const_iterator lower_bound (const key_type& k) const
+	{
+        return _tree.lower_bound(k);
+	}
 
-	// iterator upper_bound (const key_type& k)
-	// {
-	// }
-	// const_iterator upper_bound (const key_type& k) const
-	// {
-	// }
+	iterator upper_bound (const key_type& k)
+	{
+        return _tree.upper_bound(k);
+	}
+	const_iterator upper_bound (const key_type& k) const
+	{
+        return _tree.upper_bound(k);
+	}
 
 	// pair<const_iterator,const_iterator> equal_range (const key_type& k) const
 	// {
