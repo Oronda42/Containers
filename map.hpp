@@ -308,8 +308,8 @@ class map
         const_iterator ite = end();
         while(it != ite )
         {
-            //bool isinf = _comp(it->first,k);
-            bool issup = (k, it->first);
+            
+            bool issup = _comp(k, it->first);
             if(issup)
                 return it;
             it++;
