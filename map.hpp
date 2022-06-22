@@ -45,6 +45,7 @@ class map
 			}
 	};
 	
+    //typedef value_compare   value_comp;
     typedef Alloc                                       				allocator_type;
     typedef typename allocator_type::reference							reference;
     typedef typename allocator_type::const_reference					const_reference;
@@ -106,6 +107,20 @@ class map
 	// map& operator= (const map& x)
 	// {
 	// }
+
+    bool isInf(const value_type& lhs, const value_type& rhs) const
+    {
+        return _comp(lhs, rhs);
+    }
+    bool isEqual(const value_type& lhs, const value_type& rhs) const
+    { 
+        return (!_comp(lhs, rhs) && !_comp(rhs, lhs)); 
+    }
+    
+    bool isSup(const value_type& lhs, const value_type& rhs) const
+    {
+        return (!_comp(lhs, rhs) && !isEqual(lhs, rhs));
+    }
 
 
 	iterator begin() 
@@ -293,12 +308,18 @@ class map
             return ite;
 	}
 
-	// pair<const_iterator,const_iterator> equal_range (const key_type& k) const
-	// {
-	// }
-	// pair<iterator,iterator>             equal_range (const key_type& k)
-	// {
-	// }
+
+    pair<iterator,iterator> equal_range (const key_type& k)
+	{
+        pair<iterator,iterator> p = ft::make_pair(lower_bound(k), upper_bound(k));
+        return p;
+	}
+    pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+	{
+        pair<const_iterator,const_iterator> p = ft::make_pair(lower_bound(k), upper_bound(k));
+        return p;
+
+	}
 
 	allocator_type get_allocator() const
 	{
@@ -317,6 +338,8 @@ class map
 		_tree.print_tree_inOrder();
         std::cout << std::endl;
 	}
+
+    
 
     private:
 		tree _tree;
