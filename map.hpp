@@ -77,21 +77,21 @@ class map
 				
 	//range (2)	
 
-	template <class InputIterator>
-	map (InputIterator first, InputIterator last,const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type())
-	{
-		_size = 0;
-		_comp = comp;
-		_alloc = alloc;
-        _tree(allocator_type(), value_compare(comp))
-		insert(first, last);
+	template <class InputIterator >
+	map (InputIterator first, InputIterator last,const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type(),
+    typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type* = NULL) : 
+	_tree(allocator_type(), value_compare(comp)),  _comp(comp), _alloc(alloc), _size(0)  
+    {
+        insert(first, last);
+    }
+		
          
-	}
+	
 		
 	//copy (3)	
 	map (const map& x)
 	{
-		_root = NULL;
+		
 		_size = x._size;
 		_comp = x._comp;
 		_alloc = x._alloc;
@@ -245,20 +245,52 @@ class map
 
 	iterator lower_bound (const key_type& k)
 	{
-        return _tree.lower_bound(k);
+         iterator it = begin();
+            iterator ite = end();
+            while(++it != ite )
+            {
+                bool inf = _comp(it->first,k);
+                if(!inf)
+                    return it;
+            }
+            return ite;
 	}
 	const_iterator lower_bound (const key_type& k) const
 	{
-        return _tree.lower_bound(k);
+         const_iterator it = begin();
+            const_iterator ite = end();
+            while(++it != ite )
+            {
+                bool inf = _comp(it->first,k);
+                if(!inf)
+                    return it;
+            }
+            return ite;
 	}
 
 	iterator upper_bound (const key_type& k)
 	{
-        return _tree.upper_bound(k);
+        iterator it = begin();
+            iterator ite = end();
+            while(++it != ite )
+            {
+                bool inf = _comp(it->first,k);
+                if(!inf)
+                    return it;
+            }
+            return ite;
 	}
 	const_iterator upper_bound (const key_type& k) const
 	{
-        return _tree.upper_bound(k);
+         const_iterator it = begin();
+            const_iterator ite = end();
+            while(++it != ite )
+            {
+                bool inf = _comp(it->first,k);
+                if(!inf)
+                    return it;
+            }
+            return ite;
 	}
 
 	// pair<const_iterator,const_iterator> equal_range (const key_type& k) const

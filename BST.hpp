@@ -451,57 +451,7 @@ class BST
             return (!_comp(lhs, rhs) && !isEqual(lhs, rhs));
         }
 
-        iterator lower_bound (const typename value_type::first& k)
-        {
-            iterator it = begin();
-            iterator ite = end();
-            while(++it != ite )
-            {
-                bool inf = isInf(it->first,k);
-                if(!inf)
-                    return it;
-            }
-            return ite;
-        }
-
-        const_iterator lower_bound ( const typename  value_type::first & k) const
-        {
-            const_iterator it = begin();
-            const_iterator ite = end();
-            while(++it != ite )
-            {
-                bool inf = isInf(it->first,k);
-                if(!inf)
-                    return it;
-            }
-            return ite;
-        }
-
-        iterator upper_bound (const typename value_type::first& k)
-        {
-            iterator it = begin();
-            iterator ite = end();
-            while(++it != ite )
-            {
-                bool isinf = isSup(it->first,k);
-                if(!isinf)
-                    return it;
-            }
-            return ite;
-        }
-
-        const_iterator upper_bound (const typename value_type::first& k) const
-        {
-            const_iterator it = begin();
-            const_iterator ite = end();
-            while(++it != ite )
-            {
-                bool isinf = isSup(it->first,k);
-                if(!isinf)
-                    return it;
-            }
-            return ite;
-        }
+      
 
         void SetLast()
         {
