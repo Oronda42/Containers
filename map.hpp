@@ -181,9 +181,10 @@ class map
 
   
 
-	// mapped_type& operator[] (const key_type& k)
-	// {
-	// }
+	mapped_type& operator[] (const key_type& k)
+	{
+       return (*((this->insert(ft::make_pair(k,mapped_type()))).first)).second;
+	}
 
 
 	//single element (1)	
@@ -249,10 +250,11 @@ class map
 		node_pointer p = _tree.find(value_type(k, T()));
 		return iterator( p);
 	}
-	// const_iterator find (const key_type& k) const
-	// {
-	// 	return const_iterator(tree.find(k));
-	// }
+	const_iterator find (const key_type& k) const
+	{
+		node_const_pointer p = _tree.find(value_type(k, T()));
+		return const_iterator( p);
+	}
 
 	// size_type count (const key_type& k) const
 	// {
@@ -260,52 +262,59 @@ class map
 
 	iterator lower_bound (const key_type& k)
 	{
-         iterator it = begin();
-            iterator ite = end();
-            while(++it != ite )
-            {
-                bool inf = _comp(it->first,k);
-                if(!inf)
-                    return it;
-            }
-            return ite;
+        iterator it = begin();
+        iterator ite = end();
+        while(it != ite)
+        {
+            bool inf = _comp(it->first,k);
+            if(!inf)
+                return it;
+            it++;
+        }
+        return ite;
 	}
 	const_iterator lower_bound (const key_type& k) const
 	{
-         const_iterator it = begin();
-            const_iterator ite = end();
-            while(++it != ite )
-            {
-                bool inf = _comp(it->first,k);
-                if(!inf)
-                    return it;
-            }
-            return ite;
+        const_iterator it = begin();
+        const_iterator ite = end();
+        while(it != ite )
+        {
+            bool inf = _comp(it->first,k);
+            if(!inf)
+                return it;
+            it++;
+        }
+        return ite;
 	}
 
 	iterator upper_bound (const key_type& k)
 	{
-        iterator it = begin();
-            iterator ite = end();
-            while(++it != ite )
-            {
-                bool inf = _comp(it->first,k);
-                if(!inf)
-                    return it;
-            }
-            return ite;
+         iterator it = begin();
+        iterator ite = end();
+        while(it != ite )
+        {
+            //bool isinf = _comp(it->first,k);
+            bool issup = _comp(k, it->first);
+            if(issup)
+                return it;
+            it++;
+        }
+        return ite;
+        
 	}
 	const_iterator upper_bound (const key_type& k) const
 	{
-         const_iterator it = begin();
-            const_iterator ite = end();
-            while(++it != ite )
-            {
-                bool inf = _comp(it->first,k);
-                if(!inf)
-                    return it;
-            }
-            return ite;
+        const_iterator it = begin();
+        const_iterator ite = end();
+        while(it != ite )
+        {
+            //bool isinf = _comp(it->first,k);
+            bool issup = (k, it->first);
+            if(issup)
+                return it;
+            it++;
+        }
+        return ite;
 	}
 
 

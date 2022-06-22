@@ -36,8 +36,6 @@ public:
 
     BSTIterator() : _node(NULL) {}
     BSTIterator(const node_pointer node) : _node(node) {}
-    //BSTIterator(node_const_pointer node) : _node1(node) {}
-
 
     BSTIterator& operator=(const BSTIterator& other) 
     {
@@ -45,9 +43,7 @@ public:
         return *this;
     }
     
-    //reference operator*()  { return _node->m_value; }
     reference operator*() const  { return _node->m_value; }
-   // pointer operator->()  { return &(_node->m_value); }
     pointer operator->() const  { return &(_node->m_value); }
 
    
@@ -93,86 +89,86 @@ public:
 
 
 
-template <class Tree >
-class BSTConstIterator : ft::iterator<ft::bidirectional_iterator_tag, Tree> {
-public:
+// template <class Tree >
+// class BSTConstIterator : ft::iterator<ft::bidirectional_iterator_tag, Tree> {
+// public:
 
-    typedef typename Tree::value_type            value_type;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category     iterator_category;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type       difference_type;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer               pointer;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference             reference;
+//     typedef typename Tree::value_type            value_type;
+//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category     iterator_category;
+//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type       difference_type;
+//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer               pointer;
+//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference             reference;
 
-    typedef typename Tree::node_type                                                           node_type;
-    typedef typename Tree::node_pointer                                                        node_pointer;
-    typedef typename Tree::node_reference                                                      node_reference;
-    typedef typename Tree::node_const_pointer                                                  node_const_pointer;
-    typedef typename Tree::node_const_reference                                                node_const_reference;
+//     typedef typename Tree::node_type                                                           node_type;
+//     typedef typename Tree::node_pointer                                                        node_pointer;
+//     typedef typename Tree::node_reference                                                      node_reference;
+//     typedef typename Tree::node_const_pointer                                                  node_const_pointer;
+//     typedef typename Tree::node_const_reference                                                node_const_reference;
 
-   private:
-    node_const_pointer _node;
+//    private:
+//     node_const_pointer _node;
 
-    public:
+//     public:
 
 
-    BSTConstIterator() : _node(NULL) {}
-    BSTConstIterator(node_const_pointer node) : _node(node) {}
-    //BSTConstIterator(node_const_pointer node) : _node1(node) {}
+//     BSTConstIterator() : _node(NULL) {}
+//     BSTConstIterator(node_const_pointer node) : _node(node) {}
+//     //BSTConstIterator(node_const_pointer node) : _node1(node) {}
 
-    template<typename U>
-    BSTConstIterator(const BSTConstIterator<const U>& src ) : _node(src._node) {}
+//     template<typename U>
+//     BSTConstIterator(const BSTConstIterator<const U>& src ) : _node(src._node) {}
    
-    BSTConstIterator(const BSTConstIterator& other) : _node(other._node) {}
+//     BSTConstIterator(const BSTConstIterator& other) : _node(other._node) {}
 
-    BSTConstIterator& operator=(const BSTConstIterator& other) 
-    {
-        _node = other._node;
-        return *this;
-    }
+//     BSTConstIterator& operator=(const BSTConstIterator& other) 
+//     {
+//         _node = other._node;
+//         return *this;
+//     }
     
-    reference operator*() const { return _node->m_value; }
+//     reference operator*() const { return _node->m_value; }
   
-    pointer operator->() const  { return &(_node->m_value); }
+//     pointer operator->() const  { return &(_node->m_value); }
    
 
    
-    //for non-const iterator to const iterator
-    operator BSTConstIterator<const Tree> () const
-    { 
-        return (BSTConstIterator<const Tree>(this->_node));
-    }
+//     //for non-const iterator to const iterator
+//     operator BSTConstIterator<const Tree> () const
+//     { 
+//         return (BSTConstIterator<const Tree>(this->_node));
+//     }
 
      
  
 	
-    BSTConstIterator& operator++() {
-       _node = Tree::next(_node);
-		return (*this);
-    }
-    BSTConstIterator operator++(int) {
-        BSTConstIterator tmp = *this;
-        ++(*this);
-        return tmp;
-    }
-    bool operator==(const BSTConstIterator& rhs) {
-        return _node == rhs._node;
-    }
-    bool operator!=(const BSTConstIterator& rhs) {
-        return _node != rhs._node;
-    }
+//     BSTConstIterator& operator++() {
+//        _node = Tree::next(_node);
+// 		return (*this);
+//     }
+//     BSTConstIterator operator++(int) {
+//         BSTConstIterator tmp = *this;
+//         ++(*this);
+//         return tmp;
+//     }
+//     bool operator==(const BSTConstIterator& rhs) {
+//         return _node == rhs._node;
+//     }
+//     bool operator!=(const BSTConstIterator& rhs) {
+//         return _node != rhs._node;
+//     }
     
-    BSTConstIterator& operator--() {
-        _node = Tree::prev(_node);
-        return *this;
-    }
-    BSTConstIterator operator--(int) {
-        BSTConstIterator temp = *this;
-        --*this;
-        return temp;
-    }
+//     BSTConstIterator& operator--() {
+//         _node = Tree::prev(_node);
+//         return *this;
+//     }
+//     BSTConstIterator operator--(int) {
+//         BSTConstIterator temp = *this;
+//         --*this;
+//         return temp;
+//     }
 
 
-};
+// };
 
 
 template <class T>
@@ -208,7 +204,7 @@ class BST
         typedef typename allocator_type::size_type                              size_type;
 		typedef Compare                                                     	key_compare;
 		typedef typename ft::BSTIterator<self_type>                         	iterator;
-		typedef typename ft::BSTIterator<const self_type>                  const_iterator;
+		typedef typename ft::BSTIterator<const self_type>                       const_iterator;
 
 		typedef BSTNode                                                         node_type;
 		typedef node_type*                                                      node_pointer;
@@ -216,12 +212,11 @@ class BST
 		typedef const node_type*                                                node_const_pointer;
 		typedef const node_type&                                                node_const_reference;
        
-       //convert a bstiterator to a bstconstiterator
 
 
         BST(const allocator_type& alloc = allocator_type(), const key_compare& comp = key_compare() ) : 
         _root(NULL), 
-        _last(), 
+        _last(CreateNode()), 
         _alloc(alloc), 
         _comp(comp),
         _size(0)
@@ -289,7 +284,7 @@ class BST
 		
 		node_pointer GetMax(node_pointer root) 
 		{
-			if(root->right == NULL || root->right == &_last)
+			if(root->right == NULL || root->right == _last)
 				return root;
 			else
 				return GetMax(root->right);
@@ -319,7 +314,7 @@ class BST
 		
 		node_pointer GetMax(node_pointer root) const
 		{
-			if(root->right == NULL || root->right == &_last)
+			if(root->right == NULL || root->right == _last)
 				return root;
 			else
 				return GetMax(root->right);
@@ -346,19 +341,21 @@ class BST
 
 		iterator end()
 		{   
-            iterator temp = iterator(&_last);
+            iterator temp = iterator(_last);
 			return temp;
 		}	
 
         const_iterator end() const
 		{
             
-            // const_iterator temp = iterator(&_last);
-			// return temp--;
+            // const_iterator temp = const_iterator(&_last);
+			// return temp;
+
             node_pointer temp = GetMax(_root);
             if(temp->right)
                 return const_iterator(temp->right);
             return const_iterator(NULL);
+            
             // node_type temp = _last;
             // const_iterator  result (temp--);
 			// return const_iterator(result);
@@ -366,7 +363,7 @@ class BST
 
         node_pointer GetLast() const 
         {
-            return &_last;
+            return _last;
         }
 
 
@@ -456,16 +453,23 @@ class BST
         void SetLast()
         {
             node_pointer max = GetMax();
-            max->right = &_last;
-            _last.parent = max;
+            max->right = _last;
+            _last->parent = max;
          
         }
 
-        bool insert( const T &value)
+        node_pointer CreateNode(const value_type& k = value_type())
         {
             node_pointer new_node = _alloc.allocate(1);
-            _alloc.construct(new_node, value);
+            _alloc.construct(new_node, k);
+            return new_node;
+        }
 
+
+        bool insert( const T &value)
+        {
+           
+            node_pointer new_node = CreateNode(value);
             if (_root == NULL)
             {
                 _root = new_node;
@@ -477,7 +481,7 @@ class BST
             node_pointer current = _root;
             node_pointer parent;
            
-            while (current && current != &_last)
+            while (current && current != _last)
             {
                 parent = current;
                
@@ -495,7 +499,7 @@ class BST
                 {
                     
                     current = current->right;
-                    if(current == NULL || current == &_last)
+                    if(current == NULL || current == _last)
                     {
                         parent->right = new_node;
                         new_node->parent = parent;
@@ -505,7 +509,6 @@ class BST
                 }
                 else if (isEqual(value, current->m_value))
                 {
-                   
                     return false;
                 }
             }
@@ -520,14 +523,14 @@ class BST
             node_pointer current = _root;
             while (current != NULL)
             {
-                if (_comp(value, current->m_value) > 0)
+                if (isInf(value, current->m_value))
                     current = current->left;
-                else if (_comp(value, current->m_value) < 0)
+                else if (isSup(value, current->m_value))
                     current = current->right;
                 else
                     return current;
             }
-            return NULL;
+            return _last;
         }
         void print_tree_inOrder()
         {
@@ -537,7 +540,7 @@ class BST
 
         void print_tree(node_pointer node)
         {
-            if (node == NULL || node == &_last)
+            if (node == NULL || node == _last)
                 return;
             
             print_tree(node->left);
@@ -558,7 +561,7 @@ class BST
             std::cout << std::endl;
             for (int i = COUNTS; i < space; i++)
                 std::cout << " ";
-            if(node == &_last)
+            if(node == _last)
             {
                 std::cout << "LAST" << std::endl;
             }
@@ -588,7 +591,7 @@ class BST
        
         private:
             node_pointer _root;
-			node_type _last;
+			node_pointer _last;
             allocator_type _alloc;
             key_compare _comp;
             size_type _size;
