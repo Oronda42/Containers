@@ -7,7 +7,8 @@
 
 #define T1 int
 #define T2 std::string
-typedef ft::map<T1, T2>::value_type T3;
+typedef ft::map<T1, T2> m;
+typedef ft::pair<T1, T2> T3;
 typedef ft::map<T1, T2>::iterator iterator;
 
 static int iter = 0;
@@ -24,13 +25,25 @@ std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::
 int main(int argc, char const *argv[])
 {
     
-     ft::map<int , std::string> mp;
+      ft::map<T1 , T2> map;
+
+         map.insert(T3(4, "four"));
+          map.insert(T3(3, "three"));
+        map.insert(T3(1, "one"));
+        map.insert(T3(2, "two"));
+        map.insert(T3(5, "five"));
+        map.insert(T3(6, "six"));
+
+        map.print2D();
+        iterator it = map.find(5);
+        map.erase(it);
+
     
-    
-    ft::pair<ft::map<int , std::string>::iterator ,bool>  p ;
-	p =  mp.insert( ft::pair<int,std::string>(42, "lol"));
+       
+    // ft::pair<ft::map<int , std::string>::iterator ,bool>  p ;
+	// p =  mp.insert( ft::pair<int,std::string>(42, "lol"));
    
-    printPair(p.first);
+    // printPair(p.first);
 	// std::cout << p.first->first << std::endl;
 	// std::cout << mp[42] << std::endl; 
 	// while (p.first != mp.end()) ++p.first;

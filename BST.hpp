@@ -46,17 +46,13 @@ public:
     reference operator*() const  { return _node->m_value; }
     pointer operator->() const  { return &(_node->m_value); }
 	
-
-	   
+   
     //for non-const iterator to const iterator
     operator BSTIterator<const Tree> () const
     { 
         return (BSTIterator<const Tree>(this->_node));
     }
 
-     
- 
-	
     BSTIterator& operator++() {
        _node = Tree::next(_node);
 		return (*this);
@@ -349,17 +345,13 @@ class BST
         const_iterator end() const
 		{
             
-            // const_iterator temp = const_iterator(&_last);
-			// return temp;
-
-            node_pointer temp = GetMax(_root);
-            if(temp->right)
-                return const_iterator(temp->right);
-            return const_iterator(NULL);
+            // node_pointer temp = GetMax(_root);
+            // if(temp->right)
+            //     return const_iterator(temp->right);
+            // return const_iterator(NULL);
+            const_iterator temp = const_iterator(_last);
+			return temp;
             
-            // node_type temp = _last;
-            // const_iterator  result (temp--);
-			// return const_iterator(result);
 		}	
 
         node_pointer GetLast() const 
@@ -517,6 +509,52 @@ class BST
             SetLast();
             _size++;
             return true;
+        }
+        
+        void erase(node_type node)
+        {   
+            node_pointer current = &node;
+            node_pointer sucessor;
+
+            // If the node has no children, just remove it from the tree
+            if (current->left == NULL && current->right == NULL)
+            {
+                if (current->parent->left == current)
+                    current->parent->left = NULL;
+                else
+                    current->parent->right = NULL;
+                _alloc.destroy(current);
+                _alloc.deallocate(current, 1);
+                _size--;
+                return;
+            }
+
+            // If the node has only one child, replace it with its child
+            if (current->left == NULL || current->right == NULL)
+            {
+                if (current->left)
+                    sucessor = current->left;
+                else
+                    sucessor = current->right;
+                if (current->parent->left == current)
+                    current->parent->left = sucessor;
+                else
+                    current->parent->right = sucessor;
+                sucessor->parent = current->parent;
+                _alloc.destroy(current);
+                _alloc.deallocate(current, 1);
+                _size--;
+                return;
+            }
+
+            // If the node has two children, find the in-order successor
+            // and replace the node with it
+            sucessor = GetMin(current->right);
+            
+            //current->m_value = sucessor->m_value;
+            current = CreateNode(sucessor->m_value);
+            erase(sucessor->m_value);
+            
         }
 
         node_pointer find(T value) const

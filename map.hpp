@@ -90,12 +90,8 @@ class map
 	
 		
 	//copy (3)	
-	map (const map& x)
+	map (const map& x) : _tree(x._tree),  _comp(x._comp), _alloc(x._alloc), _size(x._size)  
 	{
-		
-		_size = x._size;
-		_comp = x._comp;
-		_alloc = x._alloc;
 		insert(x.begin(), x.end());
 	}
 
@@ -218,9 +214,10 @@ class map
 	}
 
 
-	// void erase (iterator position)
-	// {
-	// }
+	void erase (iterator position)
+	{
+        _tree.erase(*position);
+    }
 
 	// size_type erase (const key_type& k)
 	// {
@@ -231,9 +228,13 @@ class map
 	// }
 	
 
-	// void swap (map& x)
-	// {
-	// }
+	void swap (map& x)
+	{
+        _tree.swap(x._tree);
+        std::swap(_comp, x._comp);
+        std::swap(_alloc, x._alloc);
+        std::swap(_size, x._size);
+	}
 
 	// void clear()
 	// {
@@ -343,7 +344,7 @@ class map
 
 	void print2D()
 	{   
-        std::cout << "size: " << _size << std::endl;
+        std::cout << "size: " << _tree.GetSize() << std::endl;
 		_tree.print2d();
 	}
 
