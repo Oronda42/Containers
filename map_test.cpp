@@ -27,20 +27,27 @@ int main(int argc, char const *argv[])
      ft::map<int , std::string> mp;
     
     
-    ft::pair<ft::map<int , std::string>::iterator ,bool>  p =  mp.insert( ft::pair<int,std::string>(42, "lol"));
-    // std::cout << p.first.f << p.second << std::endl;
+    ft::pair<ft::map<int , std::string>::iterator ,bool>  p ;
+	p =  mp.insert( ft::pair<int,std::string>(42, "lol"));
+   
     printPair(p.first);
+	// std::cout << p.first->first << std::endl;
+	// std::cout << mp[42] << std::endl; 
+	// while (p.first != mp.end()) ++p.first;
 
-	// mp.insert( ft::pair<int,std::string>(42, "mdr"));
+	// std::cout << ((mp.insert( ft::pair<int,std::string>(11, "mdr")).first) == mp.begin());
 	// mp.insert( ft::pair<int,std::string>(50, "mdr2"));
 	// mp.insert( ft::pair<int,std::string>(35, "funny"));
 
-    // mp.print2D();
-	// //   pouet.insert(ft::pair<int,int>(25, 1));
-	// //  pouet.insert(ft::pair<int,int>(75, 2));
-	// //  pouet.insert(ft::pair<int,int>(10, 0));
-	// //  pouet.insert(ft::pair<int,int>(20, 0));
-    // //  pouet.insert(ft::pair<int,int>(20, 1));
+
+	//std::cout << "begin: " << mp.begin()->first << std::endl;
+
+    //mp.print2D();
+	//   pouet.insert(ft::pair<int,int>(25, 1));
+	//  pouet.insert(ft::pair<int,int>(75, 2));
+	//  pouet.insert(ft::pair<int,int>(10, 0));
+	//  pouet.insert(ft::pair<int,int>(20, 0));
+    //  pouet.insert(ft::pair<int,int>(20, 1));
 
    
     

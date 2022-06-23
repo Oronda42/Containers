@@ -108,19 +108,19 @@ class map
 	// {
 	// }
 
-    bool isInf(const value_type& lhs, const value_type& rhs) const
-    {
-        return _comp(lhs, rhs);
-    }
-    bool isEqual(const value_type& lhs, const value_type& rhs) const
-    { 
-        return (!_comp(lhs, rhs) && !_comp(rhs, lhs)); 
-    }
+    // bool isInf(const value_type& lhs, const value_type& rhs) const
+    // {
+    //     return _comp(lhs, rhs);
+    // }
+    // bool isEqual(const value_type& lhs, const value_type& rhs) const
+    // { 
+    //     return (!_comp(lhs, rhs) && !_comp(rhs, lhs)); 
+    // }
     
-    bool isSup(const value_type& lhs, const value_type& rhs) const
-    {
-        return (!_comp(lhs, rhs) && !isEqual(lhs, rhs));
-    }
+    // bool isSup(const value_type& lhs, const value_type& rhs) const
+    // {
+    //     return (!_comp(lhs, rhs) && !isEqual(lhs, rhs));
+    // }
 
 
 	iterator begin() 
@@ -177,6 +177,8 @@ class map
 	{
          
 		return std::allocator<node_type>().max_size();
+			//typename Alloc::template rebind<node_type>::other tmp;
+			//return tmp.max_size();
 	}
 
   
@@ -190,7 +192,10 @@ class map
 	//single element (1)	
 	pair<iterator,bool> insert (const value_type& val)
 	{
-		return (pair<iterator,bool>(find(val.first), _tree.insert(val)));
+		bool success = _tree.insert(val);
+		iterator it = find(val.first);
+
+		return (pair<iterator,bool>(it, success));
 	}
 
 	//with hint (2)	
@@ -241,9 +246,10 @@ class map
 	}
 
 
-	// value_compare value_comp() const
-	// {
-	// }
+	value_compare value_comp() const
+	{
+		return value_compare(_comp);
+	}
 
 	iterator find (const key_type& k)
 	{

@@ -45,8 +45,9 @@ public:
     
     reference operator*() const  { return _node->m_value; }
     pointer operator->() const  { return &(_node->m_value); }
+	
 
-   
+	   
     //for non-const iterator to const iterator
     operator BSTIterator<const Tree> () const
     { 
