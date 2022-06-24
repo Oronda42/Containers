@@ -95,10 +95,10 @@ class map
 		insert(x.begin(), x.end());
 	}
 
-	// ~map()
-	// {
-	// 	clear();
-	// }
+	~map()
+	{
+		clear();
+	}
 
 	// map& operator= (const map& x)
 	// {
@@ -217,11 +217,13 @@ class map
 	void erase (iterator position)
 	{
         _tree.erase(*position);
+		
     }
 
 	size_type erase (const key_type& k)
 	{
 		iterator it = find(k);
+
 		if (it == end())
 			return 0;
 		else
@@ -248,9 +250,11 @@ class map
         std::swap(_size, x._size);
 	}
 
-	// void clear()
-	// {
-	// }
+	void clear()
+	{
+		_tree.clear();
+	
+	}
 
 
 	key_compare key_comp() const

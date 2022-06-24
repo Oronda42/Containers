@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oronda <oronda@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: oronda <oronda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 11:10:41 by oronda            #+#    #+#             */
-/*   Updated: 2022/05/21 15:34:57 by oronda           ###   ########.fr       */
+/*   Updated: 2022/06/24 16:50:12 by oronda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,22 @@ namespace ft{
       typedef Pointer		pointer;
       typedef Reference	reference;
     };
+
+	
+	template <bool Flag, class T, class F>
+	struct is_const;
+
+	template <class T, class F>
+	struct is_const<true, T, F>
+	{
+		typedef T type;
+	};
+
+	template <class T, class F>
+	struct is_const<false, T, F>
+	{
+		typedef F type;
+	};
 
   
 

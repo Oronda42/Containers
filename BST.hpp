@@ -11,21 +11,23 @@ namespace ft{
 
 
 
-template <class Tree >
+template <class Tree , bool IsConst>
 class BSTIterator : ft::iterator<ft::bidirectional_iterator_tag, Tree> {
 public:
 
-    typedef typename Tree::value_type            value_type;
+    typedef typename Tree::value_type            													value_type;
+	typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type> 						it;
+	typedef typename ft::iterator<ft::bidirectional_iterator_tag, const value_type> 				const_it;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category     iterator_category;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type       difference_type;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer               pointer;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference             reference;
+    typedef typename ft::is_const<IsConst, typename const_it::pointer,  typename it::pointer>::type               				pointer;
+    typedef typename ft::is_const<IsConst, typename const_it::reference,  typename it::reference>::type        				reference;
 
-    typedef typename Tree::node_type                                                           node_type;
-    typedef typename Tree::node_pointer                                                        node_pointer;
-    typedef typename Tree::node_reference                                                      node_reference;
-    typedef typename Tree::node_const_pointer                                                  node_const_pointer;
-    typedef typename Tree::node_const_reference                                                node_const_reference;
+    typedef typename Tree::node_type                                                           			node_type;
+    typedef typename Tree::node_pointer                                                        			node_pointer;
+    typedef typename Tree::node_reference                                                      			node_reference;
+    typedef typename Tree::node_const_pointer                                                  			node_const_pointer;
+    typedef typename Tree::node_const_reference                                                			node_const_reference;
 
    private:
     node_pointer _node;
@@ -48,9 +50,13 @@ public:
 	
    
     //for non-const iterator to const iterator
-    operator BSTIterator<const Tree> () const
+    // operator BSTIterator<const Tree> () const
+    // { 
+    //     return (BSTIterator<const Tree>(this->_node));
+    // }
+	 operator BSTIterator<Tree, true> () const
     { 
-        return (BSTIterator<const Tree>(this->_node));
+        return (BSTIterator<Tree, true>(this->_node));
     }
 
     BSTIterator& operator++() {
@@ -200,8 +206,8 @@ class BST
 		typedef	 Alloc 													    	allocator_type;
         typedef typename allocator_type::size_type                              size_type;
 		typedef Compare                                                     	key_compare;
-		typedef typename ft::BSTIterator<self_type>                         	iterator;
-		typedef typename ft::BSTIterator<const self_type>                       const_iterator;
+		typedef typename ft::BSTIterator<self_type, false>                         	iterator;
+		typedef typename ft::BSTIterator<self_type, true>                       const_iterator;
 
 		typedef BSTNode                                                         node_type;
 		typedef node_type*                                                      node_pointer;
@@ -218,6 +224,14 @@ class BST
         _comp(comp),
         _size(0)
         {}
+
+		
+        BST(self_type& other) : _root(NULL), _last(CreateNode()), _alloc(other._alloc), _comp(other._comp), _size(0)
+		{
+			copy(other);
+		}
+       
+        
        
         ~BST(){};
 
@@ -458,6 +472,16 @@ class BST
             return new_node;
         }
 
+	//range (3)	
+		template <class InputIterator>
+		void insert (InputIterator first, InputIterator last)
+		{
+			while (first != last)
+			{
+				insert(*first++);
+			}
+			
+		}
 
         bool insert( const T &value)
         {
@@ -522,6 +546,8 @@ class BST
         {   
 
             node_pointer current = find(node);
+			if(current == NULL)
+				return;
             node_pointer sucessor;
 
             // If the node has no children, just remove it from the tree
@@ -557,7 +583,7 @@ class BST
 						_root = current->right;
 						_root->parent = NULL;
 					}
-					DeleteNode(_root);
+					DeleteNode(current);
 					return;
 				}
 									
@@ -573,10 +599,7 @@ class BST
                 DeleteNode(current);
                 return;
             }
-
-
-
-
+			
             // If the node has two children, find the successor of the node
 			if(current == _root)
 			{
@@ -584,13 +607,23 @@ class BST
 				{
 					_root = current->left;
 					_root->parent = NULL;
+					if(current->right)
+					{
+						_root->right = current->right;
+						_root->right->parent = _root;
+					}
 				}
 				else
 				{
 					_root = current->right;
 					_root->parent = NULL;
+					if(current->left)
+					{
+						_root->left = current->left;
+						_root->left->parent = _root;
+					}
 				}
-				DeleteNode(_root);
+				DeleteNode(current);
 				return;
 			}
 
@@ -618,6 +651,20 @@ class BST
 			 DeleteNode(current);
            
         }
+
+		void clear()
+		{
+			clear(_root);
+		}
+
+		void clear(node_pointer n)
+		{
+			if(n->left)
+				clear(n->left);
+			if(n->right)
+				clear(n->right);
+			DeleteNode(n);
+		}
 
         node_pointer find(T value) const
         {
