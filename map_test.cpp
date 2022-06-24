@@ -33,10 +33,14 @@ int main(int argc, char const *argv[])
         map.insert(T3(2, "two"));
         map.insert(T3(5, "five"));
         map.insert(T3(6, "six"));
+		map.insert(T3(0, "zero"));
+		map.insert(T3(-1, "minus1"));
+		
 
         map.print2D();
-        iterator it = map.find(5);
+        iterator it = map.find(6);
         map.erase(it);
+		 map.print2D();
 
     
        

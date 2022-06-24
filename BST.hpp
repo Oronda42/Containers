@@ -511,27 +511,56 @@ class BST
             return true;
         }
         
-        void erase(node_type node)
+		void DeleteNode(node_pointer n)
+		{
+			_alloc.destroy(n);
+			_alloc.deallocate(n, 1);
+			_size--;
+		}
+
+        void erase(value_type node)
         {   
-            node_pointer current = &node;
+
+            node_pointer current = find(node);
             node_pointer sucessor;
 
             // If the node has no children, just remove it from the tree
             if (current->left == NULL && current->right == NULL)
             {
+				if(current == _root)
+				{
+					_root->parent = NULL;
+					DeleteNode(_root);
+					return;
+				}
+
                 if (current->parent->left == current)
                     current->parent->left = NULL;
                 else
                     current->parent->right = NULL;
-                _alloc.destroy(current);
-                _alloc.deallocate(current, 1);
-                _size--;
+                DeleteNode(current);
                 return;
             }
 
             // If the node has only one child, replace it with its child
             if (current->left == NULL || current->right == NULL)
             {
+				if(current == _root)
+				{
+					if(current->left)
+					{
+						_root = current->left;
+						_root->parent = NULL;
+					}
+					else
+					{
+						_root = current->right;
+						_root->parent = NULL;
+					}
+					DeleteNode(_root);
+					return;
+				}
+									
                 if (current->left)
                     sucessor = current->left;
                 else
@@ -541,20 +570,53 @@ class BST
                 else
                     current->parent->right = sucessor;
                 sucessor->parent = current->parent;
-                _alloc.destroy(current);
-                _alloc.deallocate(current, 1);
-                _size--;
+                DeleteNode(current);
                 return;
             }
 
-            // If the node has two children, find the in-order successor
-            // and replace the node with it
-            sucessor = GetMin(current->right);
-            
-            //current->m_value = sucessor->m_value;
-            current = CreateNode(sucessor->m_value);
-            erase(sucessor->m_value);
-            
+
+
+
+            // If the node has two children, find the successor of the node
+			if(current == _root)
+			{
+				if(current->left)
+				{
+					_root = current->left;
+					_root->parent = NULL;
+				}
+				else
+				{
+					_root = current->right;
+					_root->parent = NULL;
+				}
+				DeleteNode(_root);
+				return;
+			}
+
+
+
+
+			sucessor = next(current);
+			// Remove the successor from the tree
+			if (sucessor->parent->left == sucessor)
+				sucessor->parent->left = NULL;
+			else
+				sucessor->parent->right = NULL;
+			// Move the successor's children to the node's position
+			if (current->parent->left == current)
+				current->parent->left = sucessor;
+			else
+				current->parent->right = sucessor;
+			sucessor->left = current->left;
+			sucessor->right = current->right;
+			sucessor->parent = current->parent;
+			if (current->left)
+				current->left->parent = sucessor;
+			if (current->right)
+				current->right->parent = sucessor;
+			 DeleteNode(current);
+           
         }
 
         node_pointer find(T value) const

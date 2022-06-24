@@ -219,13 +219,25 @@ class map
         _tree.erase(*position);
     }
 
-	// size_type erase (const key_type& k)
-	// {
-	// }
+	size_type erase (const key_type& k)
+	{
+		iterator it = find(k);
+		if (it == end())
+			return 0;
+		else
+		{
+			_tree.erase(*it);
+			return 1;
+		}
+	}
 
-	// void erase (iterator first, iterator last)
-	// {
-	// }
+	void erase (iterator first, iterator last)
+	{
+		while (first != last)
+		{
+			_tree.erase(*(first++));
+		}
+	}
 	
 
 	void swap (map& x)
