@@ -72,7 +72,7 @@ class map
 
 	//empty (1)	
 	explicit map (const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type()) : 
-       _tree(allocator_type(), value_compare(comp)),  _comp(comp), _alloc(alloc), _size(0)   {}
+       _tree(allocator_type(), value_compare(comp)),  _comp(comp), _alloc(alloc)    {}
 	
 	
 				
@@ -81,7 +81,7 @@ class map
 	template <class InputIterator >
 	map (InputIterator first, InputIterator last,const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type(),
     typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type* = NULL) : 
-	_tree(allocator_type(), value_compare(comp)),  _comp(comp), _alloc(alloc), _size(0)  
+	_tree(allocator_type(), value_compare(comp)),  _comp(comp), _alloc(alloc) 
     {
         insert(first, last);
     }
@@ -90,19 +90,24 @@ class map
 	
 		
 	//copy (3)	
-	map (const map& x) : _tree(x._tree),  _comp(x._comp), _alloc(x._alloc), _size(x._size)  
+	map (const map& x) : _tree(x._tree),  _comp(x._comp), _alloc(x._alloc)  
 	{
-		insert(x.begin(), x.end());
+		//insert(x.begin(), x.end());
 	}
 
 	~map()
 	{
-		clear();
+		_tree.clear();
 	}
 
-	// map& operator= (const map& x)
-	// {
-	// }
+	map& operator= (const map& x)
+	{
+       _comp = x._comp;
+       _alloc = x._alloc;
+       _tree = x._tree;
+				
+        return (*this);
+	}
 
     // bool isInf(const value_type& lhs, const value_type& rhs) const
     // {
@@ -139,29 +144,29 @@ class map
         return _tree.end();
 	}
 
-	// reverse_iterator rbegin()
-	// {
-    //     return _tree.rbegin();
-	// }
+	reverse_iterator rbegin()
+	{
+        return _tree.rbegin();
+	}
 
-	// const_reverse_iterator rbegin() const
-	// {
-    //     return _tree.rbegin();
-	// }
+	const_reverse_iterator rbegin() const
+	{
+        return _tree.rbegin();
+	}
 
-	// reverse_iterator rend()
-	// {
-    //     return _tree.rend();
-	// }
+	reverse_iterator rend()
+	{
+        return _tree.rend();
+	}
 
-	// const_reverse_iterator rend() const
-	// {
-    //     return _tree.rend();
-	// }
+	const_reverse_iterator rend() const
+	{
+        return _tree.rend();
+	}
 
 	bool empty() const
 	{
-		return (_size == 0);
+		return (_tree.GetSize() == 0);
 	}
 
 	size_type size() const
@@ -245,14 +250,13 @@ class map
 	void swap (map& x)
 	{
         _tree.swap(x._tree);
-        std::swap(_comp, x._comp);
-        std::swap(_alloc, x._alloc);
-        std::swap(_size, x._size);
+
 	}
 
 	void clear()
 	{
 		_tree.clear();
+       
 	
 	}
 
@@ -273,15 +277,17 @@ class map
 		node_pointer p = _tree.find(value_type(k, T()));
 		return iterator( p);
 	}
-	const_iterator find (const key_type& k) const
+	iterator find (const key_type& k) const
 	{
-		node_const_pointer p = _tree.find(value_type(k, T()));
-		return const_iterator( p);
+		node_pointer p = _tree.find(value_type(k, T()));
+		return iterator(p);
 	}
 
-	// size_type count (const key_type& k) const
-	// {
-	// }
+	size_type count (const key_type& k) const
+	{
+        node_const_pointer p = _tree.find(value_type(k, T()));
+        return (p == _tree.GetLast()) ? 0 : 1;
+	}
 
 	iterator lower_bound (const key_type& k)
 	{
@@ -377,7 +383,7 @@ class map
 		tree _tree;
         key_compare _comp;
         allocator_type _alloc;
-        size_type _size;
+       
 
 
 };

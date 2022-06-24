@@ -89,91 +89,6 @@ public:
 };
 
 
-
-
-
-// template <class Tree >
-// class BSTConstIterator : ft::iterator<ft::bidirectional_iterator_tag, Tree> {
-// public:
-
-//     typedef typename Tree::value_type            value_type;
-//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category     iterator_category;
-//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type       difference_type;
-//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer               pointer;
-//     typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference             reference;
-
-//     typedef typename Tree::node_type                                                           node_type;
-//     typedef typename Tree::node_pointer                                                        node_pointer;
-//     typedef typename Tree::node_reference                                                      node_reference;
-//     typedef typename Tree::node_const_pointer                                                  node_const_pointer;
-//     typedef typename Tree::node_const_reference                                                node_const_reference;
-
-//    private:
-//     node_const_pointer _node;
-
-//     public:
-
-
-//     BSTConstIterator() : _node(NULL) {}
-//     BSTConstIterator(node_const_pointer node) : _node(node) {}
-//     //BSTConstIterator(node_const_pointer node) : _node1(node) {}
-
-//     template<typename U>
-//     BSTConstIterator(const BSTConstIterator<const U>& src ) : _node(src._node) {}
-   
-//     BSTConstIterator(const BSTConstIterator& other) : _node(other._node) {}
-
-//     BSTConstIterator& operator=(const BSTConstIterator& other) 
-//     {
-//         _node = other._node;
-//         return *this;
-//     }
-    
-//     reference operator*() const { return _node->m_value; }
-  
-//     pointer operator->() const  { return &(_node->m_value); }
-   
-
-   
-//     //for non-const iterator to const iterator
-//     operator BSTConstIterator<const Tree> () const
-//     { 
-//         return (BSTConstIterator<const Tree>(this->_node));
-//     }
-
-     
- 
-	
-//     BSTConstIterator& operator++() {
-//        _node = Tree::next(_node);
-// 		return (*this);
-//     }
-//     BSTConstIterator operator++(int) {
-//         BSTConstIterator tmp = *this;
-//         ++(*this);
-//         return tmp;
-//     }
-//     bool operator==(const BSTConstIterator& rhs) {
-//         return _node == rhs._node;
-//     }
-//     bool operator!=(const BSTConstIterator& rhs) {
-//         return _node != rhs._node;
-//     }
-    
-//     BSTConstIterator& operator--() {
-//         _node = Tree::prev(_node);
-//         return *this;
-//     }
-//     BSTConstIterator operator--(int) {
-//         BSTConstIterator temp = *this;
-//         --*this;
-//         return temp;
-//     }
-
-
-// };
-
-
 template <class T>
 class Node_base
 {
@@ -208,6 +123,8 @@ class BST
 		typedef Compare                                                     	key_compare;
 		typedef typename ft::BSTIterator<self_type, false>                         	iterator;
 		typedef typename ft::BSTIterator<self_type, true>                       const_iterator;
+        typedef typename ft::reverse_iterator<iterator>                       reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>                  const_reverse_iterator;
 
 		typedef BSTNode                                                         node_type;
 		typedef node_type*                                                      node_pointer;
@@ -226,9 +143,13 @@ class BST
         {}
 
 		
-        BST(self_type& other) : _root(NULL), _last(CreateNode()), _alloc(other._alloc), _comp(other._comp), _size(0)
-		{
-			copy(other);
+        BST(const self_type& other) : _root(NULL), _last(CreateNode()), _alloc(other._alloc), _comp(other._comp), _size(0)
+        {
+           const_iterator it = other.begin();
+           const_iterator ite =  other.end();
+          
+            for(; it != ite; ++it)
+				insert(*it);
 		}
        
         
@@ -246,6 +167,38 @@ class BST
 				inOrderTraversal(node->right);
 			}
 		}
+
+        self_type& operator=(const self_type& other)
+        {
+            clear();
+            _alloc = other._alloc;
+            _comp = other._comp;
+            _root = NULL;
+            _last = CreateNode();
+            _size = 0;
+            
+
+            const_iterator it = other.begin();
+            const_iterator ite = other.end();
+            for (; it != ite; ++it)
+                insert(*it);
+            return (*this);
+        }
+
+        // size_type count(const T& value) const
+        // {
+        //     // size_type count = 0;
+        //     // const_iterator it = begin();
+        //     // const_iterator ite = end();
+        //     // for (; it != ite; ++it)
+        //     //     if (*it == value)
+        //     //         ++count;
+        //     // return count;
+        //     iterator p = find(value);
+        //     return p == _last ? 0 : 1;
+        // }
+
+	  
 
 		void inOrderTraversal()
 		{
@@ -340,12 +293,24 @@ class BST
 
 		iterator begin()
 		{
-			node_pointer temp = GetMin();
+            if(_root == NULL)
+            {
+
+                return iterator(NULL);
+            }
+
+           	node_pointer temp = GetMin();
 			return iterator(temp);
 		}	
 
         const_iterator begin() const
 		{
+            if(_root == NULL)
+            {
+
+                return end();
+            }
+
 			node_pointer temp = GetMin();
 			return const_iterator(temp);
 		}	
@@ -367,6 +332,24 @@ class BST
 			return temp;
             
 		}	
+
+       reverse_iterator rbegin()
+		{
+			return reverse_iterator(end());
+		}
+		const_reverse_iterator rbegin() const
+		{
+			return const_reverse_iterator(end());
+		}
+
+		reverse_iterator rend()
+		{
+			return reverse_iterator(begin());
+		}
+		const_reverse_iterator rend() const
+		{
+			return const_reverse_iterator(begin());
+		}
 
         node_pointer GetLast() const 
         {
@@ -440,6 +423,35 @@ class BST
             return n;
         }
 		
+        void swap (self_type& x)
+	    {
+            // std::swap(_root, x._root);
+            // std::swap(_last, x._last);
+            // std::swap(_size, x._size);
+            // std::swap(_alloc, x._alloc);
+            // std::swap(_comp, x._comp);
+
+            node_pointer tmp_root = _root;
+            node_pointer tmp_last = _last;
+            allocator_type tmp_alloc = _alloc;
+            Compare tmp_comp = _comp;
+            size_type tmp_size = _size;
+
+            _root = x._root;
+            _last = x._last;
+            _alloc = x._alloc;
+            _comp = x._comp;
+            _size = x._size;
+
+            x._root = tmp_root;
+            x._last = tmp_last;
+            x._alloc = tmp_alloc;
+            x._comp = tmp_comp;
+            x._size = tmp_size;
+
+        }
+             
+	    
         
         bool isInf(const value_type& lhs, const value_type& rhs) const
         {
@@ -539,7 +551,14 @@ class BST
 		{
 			_alloc.destroy(n);
 			_alloc.deallocate(n, 1);
-			_size--;
+            if(n->left)
+                n->left = NULL;
+            if(n->right)
+                n->right = NULL;
+            if(n == _root)
+                _root = NULL;
+            if(n != _last)
+			    _size--;
 		}
 
         void erase(value_type node)
@@ -655,10 +674,13 @@ class BST
 		void clear()
 		{
 			clear(_root);
+            //_size = 0;
 		}
 
 		void clear(node_pointer n)
 		{
+            if(n == NULL)
+                return;
 			if(n->left)
 				clear(n->left);
 			if(n->right)
@@ -680,6 +702,7 @@ class BST
             }
             return _last;
         }
+        
         void print_tree_inOrder()
         {
             std::cout << "inorder: ";
