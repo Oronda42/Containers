@@ -549,8 +549,7 @@ class BST
         
 		void DeleteNode(node_pointer n)
 		{
-			_alloc.destroy(n);
-			_alloc.deallocate(n, 1);
+			
             if(n->left)
                 n->left = NULL;
             if(n->right)
@@ -559,120 +558,188 @@ class BST
                 _root = NULL;
             if(n != _last)
 			    _size--;
+            _alloc.destroy(n);
+			_alloc.deallocate(n, 1);
 		}
 
         void erase(value_type node)
         {   
 
-            node_pointer current = find(node);
-			if(current == NULL)
+            node_pointer nodeToDelete = find(node);
+			if(nodeToDelete == NULL)
 				return;
             node_pointer sucessor;
 
             // If the node has no children, just remove it from the tree
-            if (current->left == NULL && current->right == NULL)
+            if (nodeToDelete->left == NULL && nodeToDelete->right == NULL)
             {
-				if(current == _root)
+				if(nodeToDelete == _root)
 				{
 					_root->parent = NULL;
 					DeleteNode(_root);
 					return;
 				}
 
-                if (current->parent->left == current)
-                    current->parent->left = NULL;
+                if (nodeToDelete->parent->left == nodeToDelete)
+                    nodeToDelete->parent->left = NULL;
                 else
-                    current->parent->right = NULL;
-                DeleteNode(current);
+                    nodeToDelete->parent->right = NULL;
+                DeleteNode(nodeToDelete);
                 return;
             }
 
             // If the node has only one child, replace it with its child
-            if (current->left == NULL || current->right == NULL)
+            if (nodeToDelete->left == NULL || nodeToDelete->right == NULL)
             {
-				if(current == _root)
+                
+               
+
+				if(nodeToDelete == _root)
 				{
-					if(current->left)
+					if(nodeToDelete->left)
 					{
-						_root = current->left;
+						_root = nodeToDelete->left;
 						_root->parent = NULL;
 					}
 					else
 					{
-						_root = current->right;
+						_root = nodeToDelete->right;
 						_root->parent = NULL;
 					}
-					DeleteNode(current);
+					DeleteNode(nodeToDelete);
 					return;
 				}
 									
-                if (current->left)
-                    sucessor = current->left;
+                if (nodeToDelete->left)
+                    sucessor = nodeToDelete->left;
                 else
-                    sucessor = current->right;
-                if (current->parent->left == current)
-                    current->parent->left = sucessor;
+                    sucessor = nodeToDelete->right;
+
+                if (nodeToDelete->parent->left == nodeToDelete)
+                    nodeToDelete->parent->left = sucessor;
                 else
-                    current->parent->right = sucessor;
-                sucessor->parent = current->parent;
-                DeleteNode(current);
-                return;
+                    nodeToDelete->parent->right = sucessor;
+                 sucessor->parent = nodeToDelete->parent;
+                 DeleteNode(nodeToDelete);
+        
+                // if (sucessor->parent->left == sucessor)
+                // {
+                //     if(sucessor->left)
+                //     {
+                //         sucessor->parent->left = sucessor->left;
+                //         sucessor->left->parent= sucessor->parent;
+                //     }
+                //     else
+                //         sucessor->parent->left = NULL;
+                // }
+                // else
+                // {
+                //     if(sucessor->left)
+                //     {
+                //         sucessor->parent->right = sucessor->left;
+                //         sucessor->left->parent= sucessor->parent;
+                //     }
+                //     else
+                //         sucessor->parent->right = NULL;
+                // }
+
+
+                // sucessor->left = nodeToDelete->left;
+                // sucessor->right = nodeToDelete->right;
+               
+
+                // if (nodeToDelete->left)
+                //     nodeToDelete->left->parent = sucessor;
+                // if (nodeToDelete->right)
+                //     nodeToDelete->right->parent = sucessor;
+
+                
+                 
+                 return;
             }
-			
+    
+
+
+
             // If the node has two children, find the successor of the node
-			if(current == _root)
-			{
-				if(current->left)
-				{
-					_root = current->left;
-					_root->parent = NULL;
-					if(current->right)
-					{
-						_root->right = current->right;
-						_root->right->parent = _root;
-					}
-				}
-				else
-				{
-					_root = current->right;
-					_root->parent = NULL;
-					if(current->left)
-					{
-						_root->left = current->left;
-						_root->left->parent = _root;
-					}
-				}
-				DeleteNode(current);
-				return;
-			}
+			// if(nodeToDelete == _root)
+			// {
+			// 	if(nodeToDelete->left)
+			// 	{
+			// 		_root = nodeToDelete->left;
+			// 		_root->parent = NULL;
+			// 		if(nodeToDelete->right)
+			// 		{
+			// 			_root->right = nodeToDelete->right;
+			// 			_root->right->parent = _root;
+			// 		}
+			// 	}
+			// 	else
+			// 	{
+			// 		_root = nodeToDelete->right;
+			// 		_root->parent = NULL;
+			// 		if(nodeToDelete->left)
+			// 		{
+			// 			_root->left = nodeToDelete->left;
+			// 			_root->left->parent = _root;
+			// 		}
+			// 	}
+			// 	DeleteNode(nodeToDelete);
+			// 	return;
+			// }
 
+			sucessor = GetMax(nodeToDelete->left);
 
-
-
-			sucessor = next(current);
 			// Remove the successor from the tree
 			if (sucessor->parent->left == sucessor)
-				sucessor->parent->left = NULL;
+            {
+                if(sucessor->left)
+                {
+                    sucessor->parent->left = sucessor->left;
+                    sucessor->left->parent= sucessor->parent;
+                }
+                else
+				    sucessor->parent->left = NULL;
+            }
 			else
-				sucessor->parent->right = NULL;
+            {
+                if(sucessor->left)
+                {
+                    sucessor->parent->right = sucessor->left;
+                    sucessor->left->parent= sucessor->parent;
+                }
+                else
+				    sucessor->parent->right = NULL;
+            }
+
 			// Move the successor's children to the node's position
-			if (current->parent->left == current)
-				current->parent->left = sucessor;
-			else
-				current->parent->right = sucessor;
-			sucessor->left = current->left;
-			sucessor->right = current->right;
-			sucessor->parent = current->parent;
-			if (current->left)
-				current->left->parent = sucessor;
-			if (current->right)
-				current->right->parent = sucessor;
-			 DeleteNode(current);
+            if(nodeToDelete != _root)
+            {
+                if (nodeToDelete->parent->left == nodeToDelete)
+                    nodeToDelete->parent->left = sucessor;
+                else
+                    nodeToDelete->parent->right = sucessor;
+            }
+            else
+                _root = sucessor;
+			
+
+			sucessor->left = nodeToDelete->left;
+			sucessor->right = nodeToDelete->right;
+			sucessor->parent = nodeToDelete->parent;
+
+			if (nodeToDelete->left)
+				nodeToDelete->left->parent = sucessor;
+			if (nodeToDelete->right)
+				nodeToDelete->right->parent = sucessor;
+			 DeleteNode(nodeToDelete);
            
         }
 
 		void clear()
 		{
+            if(_root == NULL)
+                clear(_last);
 			clear(_root);
             //_size = 0;
 		}
@@ -702,6 +769,24 @@ class BST
             }
             return _last;
         }
+
+       void replaceNode(node_pointer node, node_pointer replacement)
+        {
+            // this->_end->parent->right = NULL;
+            /* Parent now points to replacement */
+            if (node == this->_root)
+                this->_root = replacement;
+            else if (node == node->parent->left)
+                node->parent->left = replacement;
+            else
+                node->parent->right = replacement;
+
+            /* Replacement parent now points node parent */
+            if (replacement != NULL)
+                replacement->parent = node->parent;
+
+            // this->setEndNode();
+        }
         
         void print_tree_inOrder()
         {
@@ -721,7 +806,7 @@ class BST
 
         #define COUNTS 5
 
-        void print2d(node_pointer node, int space)
+        void print2d(node_pointer node, int space) const
         {
             if (node == NULL)
                 return;
@@ -744,7 +829,7 @@ class BST
             print2d(node->left, space);
         }
 
-        void print2d()
+        void print2d() const
         {
            
             print2d(_root, COUNTS);

@@ -364,18 +364,18 @@ class map
 		return _alloc;
 	}
 
-	void print2D()
+	void print2D() const
 	{   
         std::cout << "size: " << _tree.GetSize() << std::endl;
 		_tree.print2d();
 	}
 
-    void printinOrder()
-	{   
-        std::cout << std::endl;
-		_tree.print_tree_inOrder();
-        std::cout << std::endl;
-	}
+    // void printinOrder()
+	// {   
+    //     std::cout << std::endl;
+	// 	_tree.print_tree_inOrder();
+    //     std::cout << std::endl;
+	// }
 
     
 
