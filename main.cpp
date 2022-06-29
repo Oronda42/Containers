@@ -46,6 +46,7 @@ public:
 };
 
 int main(int argc, char** argv) {
+	{
 	if (argc != 2)
 	{
 		std::cerr << "Usage: ./test seed" << std::endl;
@@ -89,7 +90,7 @@ int main(int argc, char** argv) {
 		//NORMAL ! :P
 	}
 	
-	for (int i = 0; i < COUNT; ++i)
+	for (int i = 0; i < 10000; ++i)
 	{
 		map_int.insert(ft::make_pair(rand(), rand()));
 	}
@@ -113,5 +114,7 @@ int main(int argc, char** argv) {
 		std::cout << *it;
 	}
 	std::cout << std::endl;
+}
+	while(1);
 	return (0);
 }

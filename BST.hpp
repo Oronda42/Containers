@@ -93,18 +93,18 @@ template <class T>
 class Node_base
 {
     public:
-        T m_value;
        
         Node_base<T> *left;
         Node_base<T> *right;
 		Node_base<T> *parent;
+        
+        T m_value;
+        
         bool color;
-        
-        
 
-        Node_base() :  m_value(), left(NULL), right(NULL), parent(NULL), color(1) {}
-        Node_base(const T& value) : m_value(value), left(NULL), right(NULL), parent(NULL), color(1)  {}
-        Node_base (const Node_base<T>& other) : m_value(other.m_value), left(other.left), right(other.right), parent(other.parent), color(other.color)  {}
+        Node_base() :  left(NULL), right(NULL), parent(NULL), m_value(),color(true) {}
+        Node_base(const T& value) :  left(NULL), right(NULL), parent(NULL), m_value(value), color(true)  {}
+        Node_base (const Node_base<T>& other) : left(other.left), right(other.right), parent(other.parent), m_value(other.m_value), color(other.color)  {}
         
 };
 
@@ -359,27 +359,19 @@ class BST
 
 		static node_pointer next(node_pointer n)
 		{
-			// Gets the next node in an in-order traversal of the tree; returns null
+			
 
 			if (!n) { return n; }
 
-			// If the node has a right child, we traverse the link to that child
-			// then traverse as far to the left as we can:
 			if (n->right)
 			{
 				n = n->right;
 				while (n->left) { n = n->left; }
 			}
-			// If the node is the left node of its parent, the next node is its
-			// parent node:
 			else if (n->parent && n == n->parent->left)
 			{
 				n = n->parent;
 			}
-			// Otherwise, this node is the furthest right in its subtree; we 
-			// traverse up through its parents until we find a parent that was a
-			// left child of a node.  The next node is that node's parent.  If 
-			// we have reached the end, this will set node to null:
 			else
 			{
 				while (n->parent && n == n->parent->right) 
@@ -393,25 +385,16 @@ class BST
 
        static  node_pointer prev(node_pointer n)
         {
-            // Gets the previous node in an in-order traversal of the tree; returns null
             if (!n) { return n; }
-            // If the node has a left child, we traverse the link to that child
-            // then traverse as far to the right as we can:
             if (n->left)
             {
                 n = n->left;
                 while (n->right) { n = n->right; }
             }
-            // If the node is the right node of its parent, the previous node is its
-            // parent node:
             else if (n->parent && n == n->parent->right)
             {
                 n = n->parent;
             }
-            // Otherwise, this node is the furthest left in its subtree; we 
-            // traverse up through its parents until we find a parent that was a
-            // right child of a node.  The previous node is that node's parent.  If 
-            // we have reached the end, this will set node to null:
             else
             {
                 while (n->parent && n == n->parent->left) 
@@ -425,12 +408,6 @@ class BST
 		
         void swap (self_type& x)
 	    {
-            // std::swap(_root, x._root);
-            // std::swap(_last, x._last);
-            // std::swap(_size, x._size);
-            // std::swap(_alloc, x._alloc);
-            // std::swap(_comp, x._comp);
-
             node_pointer tmp_root = _root;
             node_pointer tmp_last = _last;
             allocator_type tmp_alloc = _alloc;
@@ -556,7 +533,9 @@ class BST
                 n->right = NULL;
             if(n == _root)
                 _root = NULL;
-            if(n != _last)
+			if (n == _last)
+				_last = NULL;
+            else
 			    _size--;
             _alloc.destroy(n);
 			_alloc.deallocate(n, 1);
@@ -570,7 +549,6 @@ class BST
 				return;
             node_pointer sucessor;
 
-            // If the node has no children, just remove it from the tree
             if (nodeToDelete->left == NULL && nodeToDelete->right == NULL)
             {
 				if(nodeToDelete == _root)
@@ -588,12 +566,8 @@ class BST
                 return;
             }
 
-            // If the node has only one child, replace it with its child
             if (nodeToDelete->left == NULL || nodeToDelete->right == NULL)
             {
-                
-               
-
 				if(nodeToDelete == _root)
 				{
 					if(nodeToDelete->left)
@@ -661,36 +635,9 @@ class BST
 
 
 
-            // If the node has two children, find the successor of the node
-			// if(nodeToDelete == _root)
-			// {
-			// 	if(nodeToDelete->left)
-			// 	{
-			// 		_root = nodeToDelete->left;
-			// 		_root->parent = NULL;
-			// 		if(nodeToDelete->right)
-			// 		{
-			// 			_root->right = nodeToDelete->right;
-			// 			_root->right->parent = _root;
-			// 		}
-			// 	}
-			// 	else
-			// 	{
-			// 		_root = nodeToDelete->right;
-			// 		_root->parent = NULL;
-			// 		if(nodeToDelete->left)
-			// 		{
-			// 			_root->left = nodeToDelete->left;
-			// 			_root->left->parent = _root;
-			// 		}
-			// 	}
-			// 	DeleteNode(nodeToDelete);
-			// 	return;
-			// }
 
 			sucessor = GetMax(nodeToDelete->left);
 
-			// Remove the successor from the tree
 			if (sucessor->parent->left == sucessor)
             {
                 if(sucessor->left)
@@ -712,7 +659,6 @@ class BST
 				    sucessor->parent->right = NULL;
             }
 
-			// Move the successor's children to the node's position
             if(nodeToDelete != _root)
             {
                 if (nodeToDelete->parent->left == nodeToDelete)
@@ -746,6 +692,7 @@ class BST
 
 		void clear(node_pointer n)
 		{
+			
             if(n == NULL)
                 return;
 			if(n->left)
@@ -785,7 +732,6 @@ class BST
             if (replacement != NULL)
                 replacement->parent = node->parent;
 
-            // this->setEndNode();
         }
         
         void print_tree_inOrder()

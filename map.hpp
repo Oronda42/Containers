@@ -425,10 +425,6 @@ template <class Key, class T, class Compare, class Alloc>
 	{ return (!(lhs < rhs)); } // Either < or >=
 
 
-
-
-
-
 } // namespace ft
 
 #endif 
