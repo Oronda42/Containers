@@ -1,9 +1,9 @@
 
 
-#include "BST.hpp"
-#include <iostream>
+
+
 #include "map.hpp"
-#include "utils.hpp"
+
 
 #define T1 int
 #define T2 std::string
@@ -13,35 +13,29 @@ typedef ft::map<T1, T2>::iterator iterator;
 
 static int iter = 0;
 
-template <typename T>
-std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
-{
-	o << "key: " << iterator->first << " | value: " << iterator->second;
-	if (nl)
-		o << std::endl;
-	return ("");
-}
+
 
 int main(int argc, char const *argv[])
 {
-    
+ {   
       ft::map<T1 , T2> map;
 
-         map.insert(T3(4, "four"));
-        map.insert(T3(3, "three"));
-        map.insert(T3(1, "one"));
-        map.insert(T3(2, "two"));
-        map.insert(T3(5, "five"));
-        map.insert(T3(6, "six"));
-		map.insert(T3(0, "zero"));
-		map.insert(T3(-1, "minus1"));
+        map.insert(T3(4, "four"));
+        // map.insert(T3(3, "three"));
+        // map.insert(T3(1, "one"));
+        // map.insert(T3(2, "two"));
+        // map.insert(T3(5, "five"));
+        // map.insert(T3(6, "six"));
+		// map.insert(T3(0, "zero"));
+		// map.insert(T3(-1, "minus1"));
 		
 
         // map.print2D();
         // iterator it = map.find(6);
         // map.erase(it);
-		  map.print2D();
+		//map.print2D();
         map.clear();
+		
     
        
     // ft::pair<ft::map<int , std::string>::iterator ,bool>  p ;
@@ -127,7 +121,7 @@ int main(int argc, char const *argv[])
     // std::cout << "Min value : " << bst.GetMin()->m_value << std::endl;
     // std::cout << "Max value : " << bst.GetMax()->m_value << std::endl;
 
-     
+}
     return 0;
 }
 
